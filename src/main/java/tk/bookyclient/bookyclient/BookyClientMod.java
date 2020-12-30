@@ -9,9 +9,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tk.bookyclient.bookyclient.accounts.encryption.Standards;
 import tk.bookyclient.bookyclient.accounts.events.RenderTextEvents;
-import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
-import tk.bookyclient.bookyclient.events.MainMenuInitListener;
+import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 @Mod(modid = Constants.MOD_ID, version = Constants.VERSION, clientSideOnly = true, name = Constants.MOD_NAME)
@@ -30,7 +29,6 @@ public class BookyClientMod {
         AccountConfig.load();
         Standards.importAccounts();
 
-        MinecraftForge.EVENT_BUS.register(new MainMenuInitListener());
         MinecraftForge.EVENT_BUS.register(new RenderTextEvents());
     }
 
