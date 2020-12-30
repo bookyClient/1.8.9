@@ -16,7 +16,7 @@ public class RenderTextEvents {
         GuiScreen screen = Minecraft.getMinecraft().currentScreen;
 
         if (screen instanceof GuiMainMenu) {
-            screen.drawCenteredString(Minecraft.getMinecraft().fontRendererObj, I18n.format("accounts.logged", Minecraft.getMinecraft().getSession().getUsername()), screen.width / 2, screen.height / 4 + 48 + 3 + 72 + 22, 0xFFCC8888);
+            screen.drawCenteredString(Minecraft.getMinecraft().fontRendererObj, I18n.format("accounts.logged", Minecraft.getMinecraft().getSession().getUsername()), screen.width / 2, screen.height / 4 + 169, 0xFFCC8888);
             return;
         }
         if (screen instanceof GuiMultiplayer) {

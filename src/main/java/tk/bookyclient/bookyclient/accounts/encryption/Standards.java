@@ -15,7 +15,7 @@ import java.nio.file.attribute.DosFileAttributes;
 
 public final class Standards {
 
-    public static File FOLDER = Constants.ACCOUNT_SWITCHER_DIR;
+    public static final File FOLDER = Constants.ACCOUNT_SWITCHER_DIR;
     public static final String config = "config.iasx", passwords = "passwords.iasp";
 
     public static String getPassword() {
