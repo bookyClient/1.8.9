@@ -6,7 +6,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinFMLCommonHandler",
-    "gui.MixinGuiMainMenu"
+    "gui.MixinGuiMainMenu",
+    "gui.MixinGuiMultiplayer"
   ],
   "injectors": {
     "defaultRequire": 1

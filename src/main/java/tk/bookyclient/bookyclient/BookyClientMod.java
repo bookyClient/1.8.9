@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tk.bookyclient.bookyclient.accounts.encryption.Standards;
-import tk.bookyclient.bookyclient.accounts.events.RenderTextEvents;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
 import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.utils.Constants;
@@ -28,8 +27,6 @@ public class BookyClientMod {
     public void init(FMLInitializationEvent event) {
         AccountConfig.load();
         Standards.importAccounts();
-
-        MinecraftForge.EVENT_BUS.register(new RenderTextEvents());
     }
 
     @EventHandler
