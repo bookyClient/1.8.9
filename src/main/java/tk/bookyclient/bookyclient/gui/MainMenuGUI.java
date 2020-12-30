@@ -125,7 +125,7 @@ public class MainMenuGUI extends GuiScreen implements GuiYesNoCallback {
             drawString(fontRendererObj, openGLWarning, x, y, -1);
         }
 
-        drawCenteredString(mc.fontRendererObj, I18n.format("ias.loggedinas", mc.getSession().getUsername()), width / 2, height / 4 + 48 + 3 + 72 + 22, 0xFFCC8888);
+        drawCenteredString(mc.fontRendererObj, I18n.format("accounts.logged", mc.getSession().getUsername()), width / 2, height / 4 + 48 + 3 + 72 + 22, 0xFFCC8888);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }
