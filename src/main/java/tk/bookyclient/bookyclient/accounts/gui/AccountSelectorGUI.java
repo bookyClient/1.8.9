@@ -11,7 +11,9 @@ import tk.bookyclient.bookyclient.accounts.exceptions.AlreadyLoggedInException;
 import tk.bookyclient.bookyclient.accounts.model.AccountData;
 import tk.bookyclient.bookyclient.accounts.model.ExtendedAccountData;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
-import tk.bookyclient.bookyclient.accounts.utils.*;
+import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
+import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
+import tk.bookyclient.bookyclient.accounts.utils.AccountManager;
 import tk.bookyclient.bookyclient.utils.HTTPTools;
 
 import java.awt.*;
@@ -38,7 +40,7 @@ public class AccountSelectorGUI extends GuiScreen {
 
         accountGUI = new List(mc);
         accountGUI.registerScrollButtons(5, 6);
-        query = I18n.format("ias.search");
+        query = I18n.format("accounts.search");
 
         buttonList.clear();
 
@@ -46,8 +48,8 @@ public class AccountSelectorGUI extends GuiScreen {
         buttonList.add(login = new GuiButton(1, width / 2 - 154 - 10, height - 52, 120, 20, I18n.format("accounts.login")));
         buttonList.add(edit = new GuiButton(7, width / 2 - 40, height - 52, 80, 20, I18n.format("accounts.edit")));
 
-        buttonList.add(offlineLogin = new GuiButton(2, width / 2 - 154 - 10, height - 28, 110, 20, I18n.format("ias.login") + " " + I18n.format("accounts.offline")));
-        buttonList.add(new GuiButton(3, width / 2 + 4 + 50, height - 28, 110, 20, I18n.format("accounts.cancel")));
+        buttonList.add(offlineLogin = new GuiButton(2, width / 2 - 154 - 10, height - 28, 110, 20, I18n.format("accounts.login") + " " + I18n.format("accounts.offline")));
+        buttonList.add(new GuiButton(3, width / 2 + 4 + 50, height - 28, 110, 20, I18n.format("gui.cancel")));
         buttonList.add(delete = new GuiButton(4, width / 2 - 50, height - 28, 100, 20, I18n.format("accounts.delete")));
 
         search = new GuiTextField(8, fontRendererObj, width / 2 - 80, 14, 160, 16);
@@ -112,7 +114,7 @@ public class AccountSelectorGUI extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         accountGUI.drawScreen(mouseX, mouseY, partialTicks);
-        drawCenteredString(fontRendererObj, I18n.format("ias.selectaccount"), width / 2, 4, -1);
+        drawCenteredString(fontRendererObj, I18n.format("accounts.selectaccount"), width / 2, 4, -1);
 
         if (failedLogin != null)
             drawCenteredString(fontRendererObj, failedLogin.getLocalizedMessage(), width / 2, height - 62, 16737380);
@@ -125,15 +127,15 @@ public class AccountSelectorGUI extends GuiScreen {
             drawBorderedRect(width - 8 - 64, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
 
             if (accounts.get(selectedAccountIndex).premium)
-                drawString(fontRendererObj, I18n.format("ias.premium"), width - 8 - 61, height / 2 - 64 - 13, 6618980);
+                drawString(fontRendererObj, I18n.format("accounts.premium"), width - 8 - 61, height / 2 - 64 - 13, 6618980);
             else
-                drawString(fontRendererObj, I18n.format("ias.notpremium"), width - 8 - 61, height / 2 - 64 - 13, 16737380);
+                drawString(fontRendererObj, I18n.format("accounts.notpremium"), width - 8 - 61, height / 2 - 64 - 13, 16737380);
 
-            drawString(fontRendererObj, I18n.format("ias.timesused"), width - 8 - 61, height / 2 - 64 - 15 + 12, -1);
+            drawString(fontRendererObj, I18n.format("accounts.timesused"), width - 8 - 61, height / 2 - 64 - 15 + 12, -1);
             drawString(fontRendererObj, String.valueOf(accounts.get(selectedAccountIndex).useCount), width - 8 - 61, height / 2 - 64 - 15 + 21, -1);
 
             if (accounts.get(selectedAccountIndex).useCount > 0) {
-                drawString(fontRendererObj, I18n.format("ias.lastused"), width - 8 - 61, height / 2 - 64 - 15 + 30, -1);
+                drawString(fontRendererObj, I18n.format("accounts.lastused"), width - 8 - 61, height / 2 - 64 - 15 + 30, -1);
                 drawString(fontRendererObj, getFormattedDate(), width - 8 - 61, height / 2 - 64 - 15 + 39, -1);
             }
         }
@@ -211,7 +213,7 @@ public class AccountSelectorGUI extends GuiScreen {
     private void updateQueried() {
         accounts = convertData();
 
-        if (!query.equals(I18n.format("ias.search")) && !query.equals(""))
+        if (!query.equals(I18n.format("accounts.search")) && !query.equals(""))
             for (int i = 0; i < accounts.size(); i++)
                 if (!accounts.get(i).alias.toLowerCase().contains(query.toLowerCase())) {
                     accounts.remove(i);
@@ -331,7 +333,7 @@ public class AccountSelectorGUI extends GuiScreen {
             ExtendedAccountData data = accounts.get(entryID);
             String alias = data.alias;
 
-            if (StringUtils.isEmpty(alias)) alias = I18n.format("ias.alt") + " " + (entryID + 1);
+            if (StringUtils.isEmpty(alias)) alias = I18n.format("accounts.account", entryID + 1);
             int color = 16777215;
             if (Minecraft.getMinecraft().getSession().getUsername().equals(data.alias)) color = 0x00FF00;
 
@@ -347,12 +349,11 @@ public class AccountSelectorGUI extends GuiScreen {
     }
 
     private String getFormattedDate() {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yy");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         return format.format(new Date());
     }
 
-    private void drawBorderedRect(Integer x, Integer y, Integer x1, Integer y1, Integer size,
-                                        Integer borderColor, Integer insideColor) {
+    private void drawBorderedRect(int x, int y, int x1, int y1, int size, int borderColor, int insideColor) {
         Gui.drawRect(x + size, y + size, x1 - size, y1 - size, insideColor);
         Gui.drawRect(x + size, y + size, x1, y, borderColor);
 

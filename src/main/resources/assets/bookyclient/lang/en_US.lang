@@ -1,0 +1,21 @@
+# Account Switcher
+accounts.logged=You are currently logged in as %s.
+accounts.selectaccount=Select an account
+accounts.offlinemode=You are currently in offline mode. You can only join offline mode servers.
+accounts.addaccount=Add Account
+accounts.login=Login
+accounts.offline=(Offline Mode)
+accounts.delete=Delete
+accounts.account=Account %s
+accounts.username=Username:
+accounts.password=Password:
+accounts.edit=Edit
+accounts.editaccount=Edit Account
+accounts.search=Search
+accounts.premium=Premium
+accounts.notpremium=Not Premium
+accounts.timesused=Times Used:
+accounts.lastused=Last Used:
+accounts.alreadylogged=You are already logged in to this account.
+accounts.reloadskins=Reload Skins
+accounts.accounts=Accounts

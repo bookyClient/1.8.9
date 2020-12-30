@@ -21,9 +21,9 @@ public class MainMenuInitListener {
         event.buttonList.add(new GuiButton(1, event.gui.width / 2 - 100, height, I18n.format("menu.singleplayer")));
         event.buttonList.add(new GuiButton(2, event.gui.width / 2 - 100, height + 24, I18n.format("menu.multiplayer")));
         event.buttonList.add(new GuiButton(0, event.gui.width / 2 - 100, height + 48, I18n.format("menu.options")));
-        event.buttonList.add(new GuiButton(6, event.gui.width / 2 - 100, height + 72, "Mods"));
+        event.buttonList.add(new GuiButton(6, event.gui.width / 2 - 100, height + 72, I18n.format("fml.menu.mods")));
         event.buttonList.add(new GuiButton(4, event.gui.width / 2 - 100, height + 96, I18n.format("menu.quit")));
 
-        event.buttonList.add(new GuiButton(Constants.ACCOUNTS_BUTTON_ID, event.gui.width / 2 - 100, height - 24, "Accounts"));
+        event.buttonList.add(new GuiButton(Constants.ACCOUNTS_BUTTON_ID, event.gui.width / 2 - 100, height - 24, I18n.format("accounts.accounts")));
     }
 }
