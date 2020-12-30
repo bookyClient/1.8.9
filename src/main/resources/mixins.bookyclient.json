@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.7.10",
+  "package": "tk.bookyclient.bookyclient.mixins",
+  "refmap": "mixins.bookyclient.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinFMLCommonHandler",
+    "gui.MixinGuiMainMenu"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "conformVisibility": true
+  }
+}
