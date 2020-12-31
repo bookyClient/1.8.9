@@ -4,6 +4,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import tk.bookyclient.bookyclient.utils.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -37,7 +38,7 @@ public class SkinRender {
         if (previewTexture == null) {
             boolean successful = loadPreview();
             if (!successful) {
-                System.err.println("Failed to load preview!");
+                Constants.LOGGER.error("Failed to load preview!");
                 return;
             }
         }

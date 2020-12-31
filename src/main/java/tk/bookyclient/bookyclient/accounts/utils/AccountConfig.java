@@ -2,6 +2,7 @@ package tk.bookyclient.bookyclient.accounts.utils;
 
 import net.minecraft.client.Minecraft;
 import tk.bookyclient.bookyclient.accounts.encryption.Standards;
+import tk.bookyclient.bookyclient.utils.Constants;
 import tk.bookyclient.bookyclient.utils.Pair;
 
 import java.io.*;
@@ -116,7 +117,7 @@ public class AccountConfig implements Serializable {
             stream.close();
             file.delete();
 
-            System.out.println("Loaded data from old file");
+            Constants.LOGGER.info("Loaded data from old file");
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
             file.delete();

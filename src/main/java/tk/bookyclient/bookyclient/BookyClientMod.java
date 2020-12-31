@@ -1,9 +1,7 @@
 package tk.bookyclient.bookyclient;
 // Created by booky10 in bookyClient (19:14 29.12.20)
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -12,25 +10,34 @@ import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
 import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.utils.Constants;
 
-@Mod(modid = Constants.MOD_ID, version = Constants.VERSION, clientSideOnly = true, name = Constants.MOD_NAME)
+import java.io.File;
+
+@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION, acceptedMinecraftVersions = "[1.8.9]")
 public class BookyClientMod {
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        Constants.createDirs();
+    @Mod.Instance(Constants.MOD_ID)
+    public static BookyClientMod instance;
+    public static File mcDir;
 
-        if (event.getModMetadata().version.equals("${version}"))
-            System.out.println("Detected Development Environment!");
+    @Mod.EventHandler
+    public void onPreInit(FMLPreInitializationEvent event) {
+        Constants.LOGGER.info("Pre-Loading " + Constants.MOD_NAME + "...");
+
+        Constants.createDirs();
     }
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
+    @Mod.EventHandler
+    public void onInit(FMLInitializationEvent event) {
+        Constants.LOGGER.info("Loading " + Constants.MOD_NAME + "...");
+
         AccountConfig.load();
         Standards.importAccounts();
     }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
+    @Mod.EventHandler
+    public void onPostInit(FMLPostInitializationEvent event) {
+        Constants.LOGGER.info("Post-Loading " + Constants.MOD_NAME + "...");
+
         SkinUtils.cacheSkins();
     }
 }
