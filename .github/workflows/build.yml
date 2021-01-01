@@ -2,9 +2,9 @@ name: Build Mod with Gradle
 
 on:
   push:
-    branches: [ developer ]
+    branches: [ develop ]
   pull_request:
-    branches: [ developer ]
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
