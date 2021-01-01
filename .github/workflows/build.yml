@@ -1,0 +1,32 @@
+name: Build Mod with Gradle
+
+on:
+  push:
+    branches: [ developer ]
+  pull_request:
+    branches: [ developer ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip build') && !contains(github.event.head_commit.message, 'docker build'))"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Grant execute permission for gradlew script
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build --stacktrace
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Builded JARs
+          path: build/libs
