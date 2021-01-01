@@ -35,7 +35,7 @@ public class MixinModDiscoverer {
             mcDirField.setAccessible(true);
             File mcDir = (File) mcDirField.get(null);
 
-            BookyClientMod.mcDir=mcDir;
+            BookyClientMod.mcDir = mcDir;
             for (String ignoredMod : CoreModManager.getIgnoredMods()) {
                 if (!ignoredMod.startsWith(Constants.MOD_ID + "-" + Constants.VERSION)) continue;
                 if (!ignoredMod.endsWith(".jar")) continue;
