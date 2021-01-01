@@ -42,7 +42,7 @@ def getGitBranch = { ->
     return stdout.toString().trim()
 }
 
-version = "${mod_version}-${getGitBranch}-${getGitHash}"
+version = "${getGitBranch}-${getGitHash}"
 group = mod_group
 archivesBaseName = mod_id
 
