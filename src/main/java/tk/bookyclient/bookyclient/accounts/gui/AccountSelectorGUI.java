@@ -36,6 +36,7 @@ public class AccountSelectorGUI extends GuiScreen {
 
     @Override
     public void initGui() {
+        SkinUtils.cacheSkins();
         Keyboard.enableRepeatEvents(true);
 
         accountGUI = new AccountList(mc);
@@ -58,7 +59,6 @@ public class AccountSelectorGUI extends GuiScreen {
         search.setTextColor(new Color(0xA5A5A5).getRGB());
 
         updateButtons();
-        if (!accounts.isEmpty()) SkinUtils.buildSkin(accounts.get(selectedAccountIndex).alias);
     }
 
     @Override

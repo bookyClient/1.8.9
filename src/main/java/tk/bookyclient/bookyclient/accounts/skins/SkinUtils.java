@@ -3,8 +3,8 @@ package tk.bookyclient.bookyclient.accounts.skins;
 import net.minecraft.client.Minecraft;
 import tk.bookyclient.bookyclient.accounts.model.AccountData;
 import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
-import tk.bookyclient.bookyclient.utils.UUIDFetcher;
 import tk.bookyclient.bookyclient.utils.Constants;
+import tk.bookyclient.bookyclient.utils.UUIDFetcher;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -87,10 +87,12 @@ public class SkinUtils {
     public static void cacheSkins() {
         if (!cacheFolder.exists()) cacheFolder.mkdirs();
 
-        for (AccountData data : AccountDatabase.getInstance().getAccounts()) {
-            File file = new File(cacheFolder, data.alias + ".png");
+        for (AccountData account : AccountDatabase.getInstance().getAccounts()) {
+            File file = new File(cacheFolder, account.alias + ".png");
+            if (file.exists() || account.alias.contains("@")) continue;
+
             try {
-                UUID uuid = UUIDFetcher.getUUID(data.alias);
+                UUID uuid = UUIDFetcher.getUUID(account.alias);
                 URL url = new URL("https://crafatar.com/skins/" + uuid);
                 InputStream input = url.openStream();
 
