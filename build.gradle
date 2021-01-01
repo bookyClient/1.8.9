@@ -1,5 +1,4 @@
 buildscript {
-
     repositories {
         jcenter()
         mavenLocal()
@@ -112,6 +111,20 @@ mixin {
     add sourceSets.main, mod_mixin_configs.replace('${mod_id}', mod_id).replace('.json', '.refmap.json')
 }
 
+task replaceConstants << {
+    def version = project.version
+    ant.replaceregexp(match: 'CURRENT_VERSION', replace: version, flags: 'g', byline: true) {
+        fileset(dir: 'src/main/java/tk/bookyclient/bookyclient/utils', includes: 'Constants.java')
+    }
+}
+
+task undoReplaceConstants << {
+    def version = project.version
+    ant.replaceregexp(match: version, replace: 'CURRENT_VERSION', flags: 'g', byline: true) {
+        fileset(dir: 'src/main/java/tk/bookyclient/bookyclient/utils', includes: 'Constants.java')
+    }
+}
+
 jar {
     manifest.attributes(
             'Manifest-Version': 1.0,
@@ -152,4 +165,14 @@ configurations {
     compile.extendsFrom external
 }
 
-build.dependsOn shadowJar
+build {
+    dependsOn shadowJar
+}
+
+compileJava {
+    dependsOn replaceConstants
+}
+
+jar {
+    dependsOn undoReplaceConstants
+}

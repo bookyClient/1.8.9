@@ -1,11 +1,14 @@
 package tk.bookyclient.bookyclient.utils;
 // Created by booky10 in bookyClient (19:12 29.12.20)
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tk.bookyclient.bookyclient.BookyClientMod;
 
 import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.util.Random;
 
@@ -13,7 +16,7 @@ public final class Constants {
 
     public static final String MOD_ID = "bookyclient";
     public static final String MOD_NAME = "bookyClient";
-    public static final String VERSION = "1.0-SNAPSHOT";
+    public static final String VERSION = "CURRENT_VERSION";
 
     public static final File MINECRAFT_DIR = BookyClientMod.mcDir;
     public static final File CLIENT_DIR = new File(MINECRAFT_DIR, "bookyClient");
