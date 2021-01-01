@@ -1,10 +1,9 @@
 package tk.bookyclient.bookyclient.accounts.encryption;
 
-import net.minecraft.client.Minecraft;
-import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.accounts.model.AccountData;
-import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
 import tk.bookyclient.bookyclient.accounts.model.ExtendedAccountData;
+import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
+import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.io.*;
@@ -20,127 +19,84 @@ public final class Standards {
 
     public static String getPassword() {
         File passwordFile = new File(FOLDER, passwords);
+
         if (passwordFile.exists()) {
             String password;
 
-            try {
-                ObjectInputStream stream = new ObjectInputStream(new FileInputStream(passwordFile));
-                password = (String) stream.readObject();
-                stream.close();
+            try (FileInputStream input = new FileInputStream(passwordFile)) {
+                try (ObjectInputStream stream = new ObjectInputStream(input)) {
+                    password = (String) stream.readObject();
+                }
             } catch (IOException | ClassNotFoundException exception) {
                 throw new RuntimeException(exception);
             }
-
             return password;
         } else {
             String newPassword = EncryptionTools.generatePassword();
-            try {
-                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(passwordFile));
-                out.writeObject(newPassword);
-                out.close();
+
+            try (FileOutputStream output = new FileOutputStream(passwordFile)) {
+                try (ObjectOutputStream stream = new ObjectOutputStream(output)) {
+                    stream.writeObject(newPassword);
+                }
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
 
             try {
                 Path file = passwordFile.toPath();
-                DosFileAttributes attr = Files.readAttributes(file, DosFileAttributes.class);
-                DosFileAttributeView view = Files.getFileAttributeView(file, DosFileAttributeView.class);
+                DosFileAttributes attributes = Files.readAttributes(file, DosFileAttributes.class);
+                DosFileAttributeView attributeView = Files.getFileAttributeView(file, DosFileAttributeView.class);
 
-                if (!attr.isHidden()) view.setHidden(true);
-            } catch (Exception exception) {
-                throw new Error(exception);
+                if (!attributes.isHidden()) attributeView.setHidden(true);
+            } catch (Throwable ignored) {
             }
             return newPassword;
         }
     }
 
-    public static void importAccounts() {
-        processData(getConfigV3());
-        processData(getConfigV2());
-        processData(getConfigV1(), false);
-    }
-
     private static boolean hasData(AccountData data) {
-        for (AccountData accountData : AccountDatabase.getInstance().getAccounts())
-            if (accountData.equalsBasic(data)) return true;
+        for (AccountData account : AccountDatabase.getInstance().getAccounts()) {
+            if (!account.equalsBasic(data)) continue;
+            return true;
+        }
         return false;
     }
 
-    private static void processData(AccountConfig oldData) {
-        processData(oldData, true);
-    }
+    public static void importAccounts() {
+        AccountConfig config = getConfig();
+        if (config == null) return;
 
-    private static void processData(AccountConfig oldData, boolean decrypt) {
-        if (oldData != null) {
-            for (AccountData data : ((AccountDatabase) oldData.getKey("altaccounts")).getAccounts()) {
-                AccountData data2 = convertData(data, decrypt);
+        for (AccountData account : ((AccountDatabase) config.getKey("accounts")).getAccounts()) {
+            AccountData converted = convertData(account);
 
-                if (!hasData(data2)) AccountDatabase.getInstance().getAccounts().add(data2);
-            }
+            if (hasData(converted)) continue;
+            AccountDatabase.getInstance().getAccounts().add(converted);
         }
     }
 
-    private static ExtendedAccountData convertData(AccountData oldData, boolean decrypt) {
-        if (decrypt)
-            if (oldData instanceof ExtendedAccountData)
-                return new ExtendedAccountData(EncryptionTools.decodeOld(oldData.user), EncryptionTools.decodeOld(oldData.password), oldData.alias, ((ExtendedAccountData) oldData).useCount, ((ExtendedAccountData) oldData).lastUsed, ((ExtendedAccountData) oldData).premium);
-            else
-                return new ExtendedAccountData(EncryptionTools.decodeOld(oldData.user), EncryptionTools.decodeOld(oldData.password), oldData.alias);
-        else if (oldData instanceof ExtendedAccountData)
-            return new ExtendedAccountData(oldData.user, oldData.password, oldData.alias, ((ExtendedAccountData) oldData).useCount, ((ExtendedAccountData) oldData).lastUsed, ((ExtendedAccountData) oldData).premium);
+    private static ExtendedAccountData convertData(AccountData account) {
+        if (account instanceof ExtendedAccountData)
+            return new ExtendedAccountData(EncryptionTools.decodeOld(account.user), EncryptionTools.decodeOld(account.password), account.alias, ((ExtendedAccountData) account).useCount, ((ExtendedAccountData) account).lastUsed, ((ExtendedAccountData) account).premium);
         else
-            return new ExtendedAccountData(oldData.user, oldData.password, oldData.alias);
+            return new ExtendedAccountData(EncryptionTools.decodeOld(account.user), EncryptionTools.decodeOld(account.password), account.alias);
     }
 
-    private static AccountConfig getConfigV3() {
-        File file = new File(FOLDER, ".ias");
-        AccountConfig config = null;
+    public static AccountConfig getConfig() {
+        File configFile = new File(FOLDER, ".ias");
 
-        if (file.exists())
-            try {
-                ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
+        if (!configFile.exists()) return null;
+
+        AccountConfig config;
+        try (FileInputStream input = new FileInputStream(configFile)) {
+            try (ObjectInputStream stream = new ObjectInputStream(input)) {
                 config = (AccountConfig) stream.readObject();
-                stream.close();
-            } catch (IOException | ClassNotFoundException exception) {
-                throw new Error(exception);
             }
+        } catch (IOException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+            return null;
+        }
 
-        file.delete();
-        return config;
-    }
-
-    private static AccountConfig getConfigV2() {
-        File file = new File(Minecraft.getMinecraft().mcDataDir, ".ias");
-        AccountConfig config = null;
-
-        if (file.exists())
-            try {
-                ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
-                config = (AccountConfig) stream.readObject();
-                stream.close();
-            } catch (IOException | ClassNotFoundException exception) {
-                throw new Error(exception);
-            }
-
-        file.delete();
-        return config;
-    }
-
-    private static AccountConfig getConfigV1() {
-        File file = new File(Minecraft.getMinecraft().mcDataDir, "user.cfg");
-        AccountConfig config = null;
-
-        if (file.exists())
-            try {
-                ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
-                config = (AccountConfig) stream.readObject();
-                stream.close();
-            } catch (IOException | ClassNotFoundException exception) {
-                throw new Error(exception);
-            }
-
-        file.delete();
+        configFile.delete();
         return config;
     }
 }

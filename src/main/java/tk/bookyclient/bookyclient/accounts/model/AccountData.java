@@ -7,7 +7,6 @@ import java.io.Serializable;
 public class AccountData implements Serializable {
 
     public final String user, password;
-
     public String alias;
 
     protected AccountData(String user, String password, String alias) {
@@ -17,9 +16,12 @@ public class AccountData implements Serializable {
     }
 
     public boolean equalsBasic(Object object) {
-        if (this == object) return true;
-        else if (object == null) return false;
-        else if (getClass() != object.getClass()) return false;
+        if (this == object)
+            return true;
+        else if (object == null)
+            return false;
+        else if (getClass() != object.getClass())
+            return false;
         else {
             AccountData other = (AccountData) object;
             return user.equals(other.user);

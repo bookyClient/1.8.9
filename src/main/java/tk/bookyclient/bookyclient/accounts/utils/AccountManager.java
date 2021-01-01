@@ -16,13 +16,14 @@ import java.util.UUID;
 
 public class AccountManager {
 
-    private static AccountManager manager = null;
+    private static AccountManager manager;
     private final UserAuthentication auth;
+    private static final Minecraft minecraft = Minecraft.getMinecraft();
 
     private AccountManager() {
         UUID uuid = UUID.randomUUID();
 
-        AuthenticationService service = new YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), uuid.toString());
+        AuthenticationService service = new YggdrasilAuthenticationService(minecraft.getProxy(), uuid.toString());
         auth = service.createUserAuthentication(Agent.MINECRAFT);
 
         service.createMinecraftSessionService();
@@ -35,18 +36,22 @@ public class AccountManager {
 
     public Throwable setUser(String username, String password) {
         AccountDatabase database = AccountDatabase.getInstance();
-        Throwable error = null;
+        String decodedName;
+        try {
+            decodedName = EncryptionTools.decode(username);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            decodedName = username;
+        }
 
-        if (!Minecraft.getMinecraft().getSession().getUsername().equals(EncryptionTools.decode(username)) || Minecraft.getMinecraft().getSession().getToken().equals("0")) {
-            if (!Minecraft.getMinecraft().getSession().getToken().equals("0"))
+        if (!minecraft.getSession().getUsername().equals(decodedName) || isOffline()) {
+            if (!isOffline())
                 for (AccountData data : database.getAccounts())
-                    if (data.alias.equals(Minecraft.getMinecraft().getSession().getUsername()) && data.user.equals(username)) {
-                        error = new AlreadyLoggedInException();
-                        return error;
-                    }
+                    if (data.alias.equals(minecraft.getSession().getUsername()) && data.user.equals(username))
+                        return new AlreadyLoggedInException();
 
             auth.logOut();
-            auth.setUsername(EncryptionTools.decode(username));
+            auth.setUsername(decodedName);
             auth.setPassword(EncryptionTools.decode(password));
 
             try {
@@ -56,25 +61,31 @@ public class AccountManager {
 
                 for (int i = 0; i < database.getAccounts().size(); i++) {
                     AccountData data = database.getAccounts().get(i);
+
                     if (data.user.equals(username) && data.password.equals(password))
                         data.alias = session.getUsername();
                 }
             } catch (Throwable throwable) {
-                error = throwable;
+                return throwable;
             }
         }
-        return error;
+        return null;
     }
 
     public void setUserOffline(String username) {
+        auth.logOut();
+        Session session = new Session(username, username, "0", "legacy");
+
         try {
-            username = EncryptionTools.decode(username);
-            auth.logOut();
-            Session session = new Session(username, username, "0", "legacy");
             setSession(session);
         } catch (Throwable throwable) {
-            throw new Error(throwable);
+            throwable.printStackTrace();
         }
+    }
+
+    private boolean isOffline() {
+        String token = minecraft.getSession().getToken();
+        return token.equals("0") || token.equals("FML") || token.equals("dev");
     }
 
     private void setSession(Session session) throws ReflectiveOperationException {

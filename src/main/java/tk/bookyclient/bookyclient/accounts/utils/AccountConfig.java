@@ -1,38 +1,34 @@
 package tk.bookyclient.bookyclient.accounts.utils;
 
-import net.minecraft.client.Minecraft;
 import tk.bookyclient.bookyclient.accounts.encryption.Standards;
-import tk.bookyclient.bookyclient.utils.Constants;
 import tk.bookyclient.bookyclient.utils.Pair;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.DosFileAttributes;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccountConfig implements Serializable {
 
-    private static AccountConfig instance = null;
-    private static final String configFileName = Standards.config;
-    private final ArrayList<Pair<String, Object>> user;
+    private static AccountConfig instance;
+    private final List<Pair<String, Object>> accounts=new ArrayList<>();
 
     public static AccountConfig getInstance() {
         return instance;
     }
 
     private AccountConfig() {
-        user = new ArrayList<>();
         instance = this;
     }
 
     public void setKey(Pair<String, Object> key) {
         if (getKey(key.getKey()) != null) removeKey(key.getKey());
 
-        user.add(key);
-        save();
+        accounts.add(key);
+        saveToFile();
     }
 
     public void setKey(String key, Object value) {
@@ -40,33 +36,61 @@ public class AccountConfig implements Serializable {
     }
 
     public Object getKey(String key) {
-        for (Pair<String, Object> user : user)
-            if (user.getKey().equals(key))
-                return user.getValue();
+        for (Pair<String, Object> account : accounts) {
+            if (!account.getKey().equals(key)) continue;
+            return account.getValue();
+        }
         return null;
     }
 
     private void removeKey(String key) {
-        user.removeIf(user -> user.getKey().equals(key));
+        accounts.removeIf(account -> account.getKey().equals(key));
     }
 
-    public static void save() {
-        saveToFile();
+    public static void saveToFile() {
+        File file = new File(Standards.FOLDER, Standards.config);
+
+        try {
+            if (file.exists()) {
+                Path path = file.toPath();
+                DosFileAttributes attributes = Files.readAttributes(path, DosFileAttributes.class);
+                DosFileAttributeView view = Files.getFileAttributeView(path, DosFileAttributeView.class);
+
+                if (attributes.isHidden()) view.setHidden(false);
+            }
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+        try (FileOutputStream output = new FileOutputStream(file)) {
+            try (ObjectOutputStream stream = new ObjectOutputStream(output)) {
+                stream.writeObject(instance);
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        try {
+            if (file.exists()) {
+                Path path = file.toPath();
+                DosFileAttributes attr = Files.readAttributes(path, DosFileAttributes.class);
+                DosFileAttributeView view = Files.getFileAttributeView(path, DosFileAttributeView.class);
+
+                if (!attr.isHidden()) view.setHidden(true);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
-    public static void load() {
-        loadFromOld();
-        readFromFile();
-    }
-
-    private static void readFromFile() {
-        File file = new File(Standards.FOLDER, configFileName);
+    public static void readFromFile() {
+        File file = new File(Standards.FOLDER, Standards.config);
 
         if (file.exists()) {
-            try {
-                ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
-                instance = (AccountConfig) stream.readObject();
-                stream.close();
+            try (FileInputStream input = new FileInputStream(file)) {
+                try (ObjectInputStream stream = new ObjectInputStream(input)) {
+                    instance = (AccountConfig) stream.readObject();
+                }
             } catch (IOException | ClassNotFoundException exception) {
                 exception.printStackTrace();
                 instance = new AccountConfig();
@@ -75,52 +99,5 @@ public class AccountConfig implements Serializable {
         }
 
         if (instance == null) instance = new AccountConfig();
-    }
-
-    private static void saveToFile() {
-        try {
-            Path file = new File(Standards.FOLDER, configFileName).toPath();
-            DosFileAttributes attributes = Files.readAttributes(file, DosFileAttributes.class);
-            DosFileAttributeView view = Files.getFileAttributeView(file, DosFileAttributeView.class);
-            if (attributes.isHidden()) view.setHidden(false);
-        } catch (NoSuchFileException ignored) {
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Standards.FOLDER, configFileName)));
-            out.writeObject(instance);
-            out.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
-        try {
-            Path file = new File(Standards.FOLDER, configFileName).toPath();
-            DosFileAttributes attr = Files.readAttributes(file, DosFileAttributes.class);
-            DosFileAttributeView view = Files.getFileAttributeView(file, DosFileAttributeView.class);
-
-            if (!attr.isHidden()) view.setHidden(true);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    private static void loadFromOld() {
-        File file = new File(Minecraft.getMinecraft().mcDataDir, "user.cfg");
-        if (!file.exists()) return;
-
-        try {
-            ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
-            instance = (AccountConfig) stream.readObject();
-            stream.close();
-            file.delete();
-
-            Constants.LOGGER.info("Loaded data from old file");
-        } catch (IOException | ClassNotFoundException exception) {
-            exception.printStackTrace();
-            file.delete();
-        }
     }
 }

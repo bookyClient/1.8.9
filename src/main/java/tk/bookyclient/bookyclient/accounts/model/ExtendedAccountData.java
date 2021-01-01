@@ -14,8 +14,7 @@ public class ExtendedAccountData extends AccountData {
         lastUsed = System.currentTimeMillis();
     }
 
-    public ExtendedAccountData(String user, String password, String alias, Integer useCount,
-                               Long lastUsed, Boolean premium) {
+    public ExtendedAccountData(String user, String password, String alias, Integer useCount, Long lastUsed, Boolean premium) {
         super(user, password, alias);
 
         this.useCount = useCount;

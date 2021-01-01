@@ -30,7 +30,7 @@ public class BookyClientMod {
     public void onInit(FMLInitializationEvent event) {
         Constants.LOGGER.info("Loading " + Constants.MOD_NAME + "...");
 
-        AccountConfig.load();
+        AccountConfig.readFromFile();
         Standards.importAccounts();
     }
 

@@ -7,7 +7,6 @@ import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 import tk.bookyclient.bookyclient.accounts.encryption.EncryptionTools;
-import tk.bookyclient.bookyclient.accounts.exceptions.AlreadyLoggedInException;
 import tk.bookyclient.bookyclient.accounts.model.AccountData;
 import tk.bookyclient.bookyclient.accounts.model.ExtendedAccountData;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
@@ -21,13 +20,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AccountSelectorGUI extends GuiScreen {
 
     private Integer selectedAccountIndex = 0, previousIndex = 0;
     private Throwable failedLogin;
     private ArrayList<ExtendedAccountData> accounts = convertData();
-    private List accountGUI;
+    private AccountList accountGUI;
 
     private GuiButton login, offlineLogin, delete, edit;
 
@@ -38,7 +38,7 @@ public class AccountSelectorGUI extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        accountGUI = new List(mc);
+        accountGUI = new AccountList(mc);
         accountGUI.registerScrollButtons(5, 6);
         query = I18n.format("accounts.search");
 
@@ -108,7 +108,7 @@ public class AccountSelectorGUI extends GuiScreen {
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
 
-        AccountConfig.save();
+        AccountConfig.saveToFile();
     }
 
     @Override
@@ -154,7 +154,7 @@ public class AccountSelectorGUI extends GuiScreen {
     }
 
     private void reloadSkins() {
-        AccountConfig.save();
+        AccountConfig.saveToFile();
         SkinUtils.cacheSkins();
         updateShownSkin();
     }
@@ -200,9 +200,7 @@ public class AccountSelectorGUI extends GuiScreen {
             current.premium = true;
             current.useCount++;
             current.lastUsed = System.currentTimeMillis();
-        } else if (failedLogin instanceof AlreadyLoggedInException)
-            getCurrentAsEditable().lastUsed = System.currentTimeMillis();
-        else if (HTTPTools.ping("http://minecraft.net"))
+        } else if (HTTPTools.ping("http://minecraft.net"))
             getCurrentAsEditable().premium = false;
     }
 
@@ -274,7 +272,7 @@ public class AccountSelectorGUI extends GuiScreen {
         return converted;
     }
 
-    private static ArrayList<AccountData> getAccountList() {
+    private static List<AccountData> getAccountList() {
         return AccountDatabase.getInstance().getAccounts();
     }
 
@@ -293,9 +291,9 @@ public class AccountSelectorGUI extends GuiScreen {
         edit.enabled = !accounts.isEmpty();
     }
 
-    public class List extends GuiSlot {
+    public class AccountList extends GuiSlot {
 
-        public List(Minecraft minecraft) {
+        public AccountList(Minecraft minecraft) {
             super(minecraft, AccountSelectorGUI.this.width, AccountSelectorGUI.this.height, 32,
                     AccountSelectorGUI.this.height - 64, 14);
         }

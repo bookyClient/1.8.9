@@ -4,22 +4,23 @@ import tk.bookyclient.bookyclient.accounts.model.AccountData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDatabase implements Serializable {
 
     private static AccountDatabase instance;
-    private final ArrayList<AccountData> altList;
+    private final List<AccountData> accounts = new ArrayList<>();
 
     private AccountDatabase() {
-        altList = new ArrayList<>();
     }
 
     private static void loadFromConfig() {
-        if (instance == null) instance = (AccountDatabase) AccountConfig.getInstance().getKey("altaccounts");
+        if (instance != null) return;
+        instance = (AccountDatabase) AccountConfig.getInstance().getKey("accounts");
     }
 
     private static void saveToConfig() {
-        AccountConfig.getInstance().setKey("altaccounts", instance);
+        AccountConfig.getInstance().setKey("accounts", instance);
     }
 
     public static AccountDatabase getInstance() {
@@ -29,10 +30,11 @@ public class AccountDatabase implements Serializable {
             instance = new AccountDatabase();
             saveToConfig();
         }
+
         return instance;
     }
 
-    public ArrayList<AccountData> getAccounts() {
-        return altList;
+    public List<AccountData> getAccounts() {
+        return accounts;
     }
 }
