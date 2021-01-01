@@ -24,7 +24,7 @@ import java.util.List;
 @Mixin(ModDiscoverer.class)
 public class MixinModDiscoverer {
 
-    @Shadow
+    @Shadow(remap = false)
     private ASMDataTable dataTable;
 
     @SuppressWarnings("unchecked")
