@@ -29,7 +29,7 @@ public class AccountSelectorGUI extends GuiScreen {
     private ArrayList<ExtendedAccountData> accounts = convertData();
     private AccountList accountGUI;
 
-    private GuiButton login, offlineLogin, delete, edit;
+    private GuiButton login, offlineLogin, delete, edit, add, cancel;
 
     private String query;
     private GuiTextField search;
@@ -44,20 +44,20 @@ public class AccountSelectorGUI extends GuiScreen {
 
         buttonList.clear();
 
-        buttonList.add(new GuiButton(0, width / 2 + 4 + 40, height - 52, 120, 20, I18n.format("accounts.addaccount")));
-        buttonList.add(login = new GuiButton(1, width / 2 - 154 - 10, height - 52, 120, 20, I18n.format("accounts.login")));
-        buttonList.add(edit = new GuiButton(7, width / 2 - 40, height - 52, 80, 20, I18n.format("accounts.edit")));
+        buttonList.add(login = new GuiButton(1, width / 2 - 154, height - 52, 100, 20, I18n.format("accounts.login")));
+        buttonList.add(offlineLogin = new GuiButton(2, width / 2 - 154, height - 28, 100, 20, I18n.format("accounts.offlinelogin")));
 
-        buttonList.add(offlineLogin = new GuiButton(2, width / 2 - 154 - 10, height - 28, 110, 20, I18n.format("accounts.login") + " " + I18n.format("accounts.offline")));
-        buttonList.add(new GuiButton(3, width / 2 + 4 + 50, height - 28, 110, 20, I18n.format("gui.cancel")));
-        buttonList.add(delete = new GuiButton(4, width / 2 - 50, height - 28, 100, 20, I18n.format("accounts.delete")));
+        buttonList.add(edit = new GuiButton(7, width / 2 - 44, height - 52, 100, 20, I18n.format("accounts.edit")));
+        buttonList.add(delete = new GuiButton(4, width / 2 - 44, height - 28, 100, 20, I18n.format("accounts.delete")));
+
+        buttonList.add(add = new GuiButton(0, width / 2 + 64, height - 52, 100, 20, I18n.format("accounts.addaccount")));
+        buttonList.add(cancel = new GuiButton(3, width / 2 + 64, height - 28, 100, 20, I18n.format("gui.cancel")));
 
         search = new GuiTextField(8, fontRendererObj, width / 2 - 80, 14, 160, 16);
         search.setText(query);
         search.setTextColor(new Color(0xA5A5A5).getRGB());
 
         updateButtons();
-
         if (!accounts.isEmpty()) SkinUtils.buildSkin(accounts.get(selectedAccountIndex).alias);
     }
 
@@ -124,33 +124,32 @@ public class AccountSelectorGUI extends GuiScreen {
 
         if (!accounts.isEmpty()) {
             SkinUtils.drawSkin(8, height / 2 - 64 - 16, 64, 128);
-            drawBorderedRect(width - 8 - 64, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
+            drawBorderedRect(width - 8 - 128, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
 
             if (accounts.get(selectedAccountIndex).premium)
-                drawString(fontRendererObj, I18n.format("accounts.premium"), width - 8 - 61, height / 2 - 64 - 13, 6618980);
+                drawString(fontRendererObj, "§l§n" + I18n.format("accounts.premium"), width - 8 - 125, height / 2 - 64 - 13, 6618980);
             else
-                drawString(fontRendererObj, I18n.format("accounts.notpremium"), width - 8 - 61, height / 2 - 64 - 13, 16737380);
+                drawString(fontRendererObj, "§l§n" + I18n.format("accounts.notpremium"), width - 8 - 125, height / 2 - 64 - 13, 16737380);
 
-            drawString(fontRendererObj, I18n.format("accounts.timesused"), width - 8 - 61, height / 2 - 64 - 15 + 12, -1);
-            drawString(fontRendererObj, String.valueOf(accounts.get(selectedAccountIndex).useCount), width - 8 - 61, height / 2 - 64 - 15 + 21, -1);
+            drawString(fontRendererObj, I18n.format("accounts.timesused", accounts.get(selectedAccountIndex).useCount), width - 8 - 125, height / 2 - 64 - 15 + 21, -1);
 
             if (accounts.get(selectedAccountIndex).useCount > 0) {
-                drawString(fontRendererObj, I18n.format("accounts.lastused"), width - 8 - 61, height / 2 - 64 - 15 + 30, -1);
-                drawString(fontRendererObj, getFormattedDate(), width - 8 - 61, height / 2 - 64 - 15 + 39, -1);
+                drawString(fontRendererObj, I18n.format("accounts.lastused"), width - 8 - 125, height / 2 - 64 - 15 + 30, -1);
+                drawString(fontRendererObj, "  " + getFormattedDate(), width - 8 - 125, height / 2 - 64 - 15 + 39, -1);
             }
         }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.enabled)
-            if (button.id == 3) escape();
-            else if (button.id == 0) add();
-            else if (button.id == 4) delete();
-            else if (button.id == 1) login(selectedAccountIndex);
-            else if (button.id == 2) offlineLogin(selectedAccountIndex);
-            else if (button.id == 7) edit();
-            else accountGUI.actionPerformed(button);
+        if (!button.enabled) return;
+        if (button.id == 3) escape();
+        else if (button.id == 0) add();
+        else if (button.id == 4) delete();
+        else if (button.id == 1) login(selectedAccountIndex);
+        else if (button.id == 2) offlineLogin(selectedAccountIndex);
+        else if (button.id == 7) edit();
+        else accountGUI.actionPerformed(button);
     }
 
     private void reloadSkins() {

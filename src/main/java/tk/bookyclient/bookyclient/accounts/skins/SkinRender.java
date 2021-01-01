@@ -1,6 +1,7 @@
 package tk.bookyclient.bookyclient.accounts.skins;
 
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
@@ -45,6 +46,7 @@ public class SkinRender {
         previewTexture.updateDynamicTexture();
 
         textureManager.bindTexture(resourceLocation);
+        GlStateManager.color(1, 1, 1, 1);
         Gui.drawModalRectWithCustomSizedTexture(xPosition, yPosition, 0, 0, width, height, 16 * 4, 32 * 4);
     }
 }
