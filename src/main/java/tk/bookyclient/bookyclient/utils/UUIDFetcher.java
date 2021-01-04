@@ -17,7 +17,7 @@ public class UUIDFetcher {
 
     public static UUID getUUID(String name) {
         try {
-            HttpsURLConnection connection = (HttpsURLConnection) new URL(String.format(URL, name)).openConnection();
+            HttpsURLConnection connection = (HttpsURLConnection) new URL(String.format(URL, name.replace(' ', '_'))).openConnection();
             connection.setRequestProperty("User-Agent", "MC/" + Minecraft.getMinecraft().getVersion() + "/bookyClient/" + Constants.VERSION + "/UUIDFetcher");
             JsonObject data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), JsonObject.class);
             return UUID.fromString(data.getAsJsonObject("data").getAsJsonObject("player").getAsJsonPrimitive("id").getAsString());
