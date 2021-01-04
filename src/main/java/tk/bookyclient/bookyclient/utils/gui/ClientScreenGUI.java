@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.gui;
+package tk.bookyclient.bookyclient.utils.gui;
 // Created by booky10 in bookyClient (20:32 04.01.21)
 
 import net.minecraft.client.gui.GuiScreen;
@@ -18,5 +18,10 @@ public class ClientScreenGUI extends GuiScreen {
         } catch (Throwable throwable) {
             throw new Error(throwable);
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        ClientSettings.saveSettings(true);
     }
 }

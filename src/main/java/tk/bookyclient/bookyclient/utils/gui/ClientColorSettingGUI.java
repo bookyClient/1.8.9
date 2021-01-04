@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.gui;
+package tk.bookyclient.bookyclient.utils.gui;
 // Created by booky10 in bookyClient (21:04 04.01.21)
 
 import net.minecraft.client.gui.GuiButton;
@@ -11,7 +11,7 @@ import tk.bookyclient.bookyclient.settings.ClientSettings;
 import java.awt.*;
 import java.text.DecimalFormat;
 
-public abstract class ClientColorSettingGUI extends GuiScreen {
+public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
     private final GuiScreen parentGuiScreen;
     protected final String name;
