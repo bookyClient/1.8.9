@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tk.bookyclient.bookyclient.BookyClientMod;
+import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.io.File;
@@ -36,6 +37,8 @@ public class MixinModDiscoverer {
             File mcDir = (File) mcDirField.get(null);
 
             BookyClientMod.mcDir = mcDir;
+            ClientSettings.loadSettings();
+
             for (String ignoredMod : CoreModManager.getIgnoredMods()) {
                 if (!ignoredMod.startsWith(Constants.MOD_ID + "-" + Constants.VERSION)) continue;
                 if (!ignoredMod.endsWith(".jar")) continue;

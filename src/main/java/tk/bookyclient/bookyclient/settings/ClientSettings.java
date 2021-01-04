@@ -32,6 +32,7 @@ public class ClientSettings implements Serializable {
     public boolean scrollableTooltips = false;
     public boolean renderOwnName = false;
     public boolean repeatingSoundFix = true;
+    public boolean windowedFullscreen = true;
 
     // Temporary values
     public static boolean zoom = false;
