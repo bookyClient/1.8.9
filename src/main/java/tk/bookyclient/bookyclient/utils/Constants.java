@@ -1,14 +1,11 @@
 package tk.bookyclient.bookyclient.utils;
 // Created by booky10 in bookyClient (19:12 29.12.20)
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tk.bookyclient.bookyclient.BookyClientMod;
 
 import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.util.Random;
 

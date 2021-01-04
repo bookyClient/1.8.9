@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tk.bookyclient.bookyclient.accounts.encryption.Standards;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
 import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
+import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.io.File;
@@ -39,5 +40,6 @@ public class BookyClientMod {
         Constants.LOGGER.info("Post-Loading " + Constants.MOD_NAME + "...");
 
         SkinUtils.cacheSkins();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientSettings.saveSettings(false),"bookyClient Config Saver Thread"));
     }
 }
