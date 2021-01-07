@@ -20,7 +20,6 @@ public class ClientSettings implements Serializable {
     public boolean FOVModifier = false;
     public boolean asyncScreenshots = true;
     public boolean crashScreen = true;
-    public boolean mouseDelayFix = true;
     public boolean numeralPing = false;
     public boolean invisibleTablist = false;
     public boolean nameTagBackground = true;
