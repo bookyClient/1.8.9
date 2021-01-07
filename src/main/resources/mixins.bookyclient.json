@@ -8,6 +8,7 @@
     "MixinFMLCommonHandler",
     "MixinMinecraft",
     "MixinModDiscoverer",
+    "gui.MixinGuiIngame",
     "gui.MixinGuiIngameForge",
     "gui.MixinGuiMainMenu",
     "gui.MixinGuiMultiplayer"
