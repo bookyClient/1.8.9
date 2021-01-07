@@ -9,6 +9,7 @@
     "MixinFMLCommonHandler",
     "MixinMinecraft",
     "MixinModDiscoverer",
+    "MixinNetHandlerPlayClient",
     "gui.MixinGui",
     "gui.MixinGuiChat",
     "gui.MixinGuiIngame",
