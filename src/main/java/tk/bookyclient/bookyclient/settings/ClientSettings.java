@@ -156,7 +156,9 @@ public class ClientSettings implements Serializable {
         Runnable runnable = () -> {
             try (FileWriter writer = new FileWriter(FILE)) {
                 if (instance == null) return;
+
                 GSON.toJson(instance, writer);
+                Constants.LOGGER.info("Saved " + Constants.MOD_NAME + " config " + (async ? "a" : "") + "synchronously!");
             } catch (IOException exception) {
                 throw new Error(exception);
             }

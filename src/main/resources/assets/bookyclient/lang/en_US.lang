@@ -20,3 +20,44 @@ accounts.alreadylogged=You are already logged in to this account.
 accounts.reloadskins=Reload Skins
 accounts.accounts=Accounts
 accounts.offlinelogin=Offline Login
+
+# Keystrokes
+keystrokes.gui.main.title=Keystrokes
+keystrokes.gui.main.name=Keystrokes...
+keystrokes.gui.main.toggle=Keystrokes: %s
+keystrokes.gui.main.spacebar=Show Spacebar: %s
+keystrokes.gui.main.reach=Show Reach: %s
+keystrokes.gui.main.fps=Show FPS: %s
+keystrokes.gui.main.wasd=Show WASD: %s
+keystrokes.gui.main.mouse=Show Mouse Buttons: %s
+keystrokes.gui.main.cps=Show CPS on Buttons: %s
+keystrokes.gui.main.sneak=Show Sneak: %s
+keystrokes.gui.main.ping=Show Ping: %s
+
+keystrokes.gui.main.scale=Scale:
+
+keystrokes.gui.colors.title=Keystrokes - Key Colors
+keystrokes.gui.colors.name=Key Colors...
+
+keystrokes.gui.custom.title=Client Settings - Keystrokes - Custom Keys
+keystrokes.gui.custom.name=Custom Keys...
+keystrokes.gui.custom.add=Add Key
+keystrokes.gui.custom.change.key=Change Key
+keystrokes.gui.custom.change.type=Change Type
+keystrokes.gui.custom.change.listening=Listening...
+keystrokes.gui.custom.delete=Delete Key
+
+keystrokes.ping.unknown=Unknown
+keystrokes.ping.format=%sms
+keystrokes.reach.none=None
+keystrokes.reach.format=%s blocks
+
+# Client
+client.gui.prefix=Client Settings
+client.gui.name=Client Settings...
+
+client.colors.chroma=Chroma:
+client.colors.red=Red:
+client.colors.green=Green:
+client.colors.blue=Blue:
+client.colors.opacity=Opacity:

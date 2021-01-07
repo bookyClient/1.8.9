@@ -208,7 +208,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        drawCenteredString(fontRendererObj, screenPrefix + name, width / 2, height / 6 - 6, Color.WHITE.getRGB());
+        drawCenteredString(fontRendererObj, screenPrefix + name, width / 2, 15, Color.WHITE.getRGB());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

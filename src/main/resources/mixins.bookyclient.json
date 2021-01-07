@@ -5,13 +5,17 @@
   "refmap": "mixins.bookyclient.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinEntity",
     "MixinFMLCommonHandler",
     "MixinMinecraft",
     "MixinModDiscoverer",
+    "gui.MixinGui",
+    "gui.MixinGuiChat",
     "gui.MixinGuiIngame",
     "gui.MixinGuiIngameForge",
     "gui.MixinGuiMainMenu",
-    "gui.MixinGuiMultiplayer"
+    "gui.MixinGuiMultiplayer",
+    "gui.MixinGuiOptions"
   ],
   "injectors": {
     "defaultRequire": 1

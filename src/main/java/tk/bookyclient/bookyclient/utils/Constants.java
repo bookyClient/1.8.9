@@ -21,6 +21,7 @@ public final class Constants {
     public static final File ACCOUNT_SWITCHER_DIR = new File(CLIENT_DIR, "accountSwitcher");
 
     public static final Integer ACCOUNTS_BUTTON_ID = new Random().nextInt(Integer.MAX_VALUE);
+    public static final Integer SETTINGS_BUTTON_ID = new Random().nextInt(Integer.MAX_VALUE);
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 

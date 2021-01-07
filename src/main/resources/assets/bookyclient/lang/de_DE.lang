@@ -20,3 +20,43 @@ accounts.alreadylogged=Sie sind bereits an diesem Konto angemeldet
 accounts.reloadskins=Skins neu laden
 accounts.accounts=Konten
 accounts.offlinelogin=Offline Einloggen
+
+# Keystrokes
+keystrokes.gui.main.title=Keystrokes
+keystrokes.gui.main.name=Keystrokes...
+keystrokes.gui.main.toggle=Keystrokes: %s
+keystrokes.gui.main.spacebar=Zeige Leertaste: %s
+keystrokes.gui.main.reach=Zeige Reichweite: %s
+keystrokes.gui.main.fps=Zeige FPS: %s
+keystrokes.gui.main.scale=Größe:
+keystrokes.gui.main.wasd=Zeige WASD: %s
+keystrokes.gui.main.mouse=Zeige Maus Tasten: %s
+keystrokes.gui.main.cps=Zeige CPS: %s
+keystrokes.gui.main.sneak=Zeige Shift: %s
+keystrokes.gui.main.ping=Zeige Ping: %s
+
+keystrokes.gui.colors.title=Keystrokes - Tasten Farben
+keystrokes.gui.colors.name=Tasten Farben...
+
+keystrokes.gui.custom.title=Client Einstellungen - Keystrokes - Eigene Tasten
+keystrokes.gui.custom.name=Eigene Tasten...
+keystrokes.gui.custom.add=Hinzufügen
+keystrokes.gui.custom.change.key=Taste ändern
+keystrokes.gui.custom.change.type=Typ ändern
+keystrokes.gui.custom.change.listening=Warten...
+keystrokes.gui.custom.delete=Lösche Taste
+
+keystrokes.ping.unknown=Unbekannt
+keystrokes.ping.format=%sms
+keystrokes.reach.none=Nichts
+keystrokes.reach.format=%s Blöcke
+
+# Client
+client.gui.prefix=Client Einstellungen
+client.gui.name=Client Einstellungen...
+
+client.colors.chroma=Chroma:
+client.colors.red=Rot:
+client.colors.green=Grün:
+client.colors.blue=Blau:
+client.colors.opacity=Sichtbarkeit:
