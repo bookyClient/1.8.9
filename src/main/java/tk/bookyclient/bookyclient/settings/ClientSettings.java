@@ -3,6 +3,7 @@ package tk.bookyclient.bookyclient.settings;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import tk.bookyclient.bookyclient.features.keystrokes.render.ExtendedCustomKey;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.io.*;
@@ -50,7 +51,6 @@ public class ClientSettings implements Serializable {
     public boolean keystrokesSpacebar = false;
     public boolean keystrokesPing = false;
     public boolean keystrokesFPS = false;
-    public boolean keystrokesKeyBackground = true;
     public boolean keystrokesSneak = false;
     public boolean keystrokesWASD = true;
     public boolean keystrokesReach = false;
@@ -60,7 +60,7 @@ public class ClientSettings implements Serializable {
     public int keystrokesGreen = 255;
     public int keystrokesBlue = 255;
     public double keystrokesScale = 1D;
-    public ArrayList<?> keystrokesCustomKeys = new ArrayList<>();
+    public ArrayList<ExtendedCustomKey> keystrokesCustomKeys = new ArrayList<>();
 
     // Wings
     public boolean wings = false;
@@ -120,6 +120,26 @@ public class ClientSettings implements Serializable {
         if (FILE.exists())
             try (FileReader reader = new FileReader(FILE)) {
                 instance = GSON.fromJson(reader, ClientSettings.class);
+
+                if (instance == null) {
+                    StringBuilder builder = new StringBuilder();
+                    int character;
+
+                    while ((character = reader.read()) != -1)
+                        builder.append((char) character);
+
+                    String replaced = builder.toString().replace("\n", "");
+                    if (replaced.equals("null") || replaced.isEmpty()) {
+                        new IllegalStateException("Error while reading config:\n" + builder).printStackTrace();
+                        Constants.LOGGER.warn("Attempting to recover from issue!");
+
+                        instance = new ClientSettings();
+                        saveSettings(false);
+
+                        Constants.LOGGER.info("Recover successful, but all settings got cleared!");
+                    } else
+                        throw new IllegalStateException("Error while reading config:\n" + builder);
+                }
             } catch (IOException exception) {
                 throw new Error(exception);
             }
@@ -135,6 +155,7 @@ public class ClientSettings implements Serializable {
 
         Runnable runnable = () -> {
             try (FileWriter writer = new FileWriter(FILE)) {
+                if (instance == null) return;
                 GSON.toJson(instance, writer);
             } catch (IOException exception) {
                 throw new Error(exception);
