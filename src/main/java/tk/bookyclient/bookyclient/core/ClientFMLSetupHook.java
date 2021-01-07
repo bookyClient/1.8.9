@@ -21,9 +21,8 @@ public class ClientFMLSetupHook implements IFMLCallHook {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins." + Constants.MOD_ID + ".json");
 
-        Constants.LOGGER.info("Setting up " + Constants.MOD_NAME + "...");
+        Constants.LOGGER.info("Setting up...");
         Constants.createDirs();
-        ClientSettings.loadSettings();
 
         return null;
     }

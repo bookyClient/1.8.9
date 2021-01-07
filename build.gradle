@@ -138,7 +138,9 @@ jar {
     manifest.attributes(
             'Manifest-Version': 1.0,
             'ModSide': 'CLIENT',
+            'FMLCorePluginContainsFMLMod': 'Yes, yes it does',
             'FMLAT': mod_access_transformer.replace('${mod_id}', mod_id),
+            'FMLCorePlugin': mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id),
 
             'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
             'TweakOrder': '0',

@@ -20,6 +20,8 @@ public class ClientMod {
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
         Constants.LOGGER.info("Pre-Loading " + Constants.MOD_NAME + "...");
+
+        ClientSettings.loadSettings();
     }
 
     @Mod.EventHandler
