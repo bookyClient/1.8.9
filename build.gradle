@@ -40,8 +40,17 @@ def getGitBranch = { ->
     }
     return stdout.toString().trim()
 }
+def getGitTag = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--abbrev=0'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
 
-version = "${getGitBranch}-${getGitHash}"
+def release = false
+version = release ? "${getGitTag}" : "${getGitBranch}-${getGitHash}"
 group = mod_group
 archivesBaseName = mod_id
 
