@@ -2,8 +2,8 @@ package tk.bookyclient.bookyclient.accounts.gui;
 
 import tk.bookyclient.bookyclient.accounts.encryption.EncryptionTools;
 import tk.bookyclient.bookyclient.accounts.model.AccountData;
-import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
 import tk.bookyclient.bookyclient.accounts.model.ExtendedAccountData;
+import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
 
 class EditAccountGUI extends AbstractAccountGUI {
 

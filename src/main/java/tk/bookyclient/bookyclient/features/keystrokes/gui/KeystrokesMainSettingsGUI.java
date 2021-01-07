@@ -7,7 +7,6 @@ import net.minecraft.client.resources.I18n;
 import tk.bookyclient.bookyclient.features.keystrokes.KeystrokesUtils;
 import tk.bookyclient.bookyclient.utils.gui.ClientScreenGUI;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class KeystrokesMainSettingsGUI extends ClientScreenGUI {
@@ -168,7 +167,7 @@ public class KeystrokesMainSettingsGUI extends ClientScreenGUI {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        drawCenteredString(fontRendererObj, screenTitle, width / 2, 15,-1);
+        drawCenteredString(fontRendererObj, screenTitle, width / 2, 15, -1);
         KeystrokesUtils.renderer.renderKeystrokes();
 
         super.drawScreen(mouseX, mouseY, partialTicks);

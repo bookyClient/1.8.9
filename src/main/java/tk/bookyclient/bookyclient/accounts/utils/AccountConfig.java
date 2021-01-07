@@ -14,7 +14,7 @@ import java.util.List;
 public class AccountConfig implements Serializable {
 
     private static AccountConfig instance;
-    private final List<Pair<String, Object>> accounts=new ArrayList<>();
+    private final List<Pair<String, Object>> accounts = new ArrayList<>();
 
     public static AccountConfig getInstance() {
         return instance;

@@ -10,7 +10,7 @@ import tk.bookyclient.bookyclient.settings.ClientSettings;
 public class WindowedFullscreen {
 
     public static void makeWindowed(boolean fullscreen) {
-        if(!ClientSettings.getInstance().windowedFullscreen)return;
+        if (!ClientSettings.getInstance().windowedFullscreen) return;
 
         try {
             if (fullscreen) {
