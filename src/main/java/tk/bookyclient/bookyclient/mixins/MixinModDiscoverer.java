@@ -40,7 +40,7 @@ public class MixinModDiscoverer {
             ClientSettings.loadSettings();
 
             for (String ignoredMod : CoreModManager.getIgnoredMods()) {
-                if (!ignoredMod.startsWith(Constants.MOD_ID + "-" + Constants.VERSION)) continue;
+                if (!ignoredMod.toLowerCase().startsWith(Constants.MOD_ID)) continue;
                 if (!ignoredMod.endsWith(".jar")) continue;
                 Constants.LOGGER.info("Trying to inject bookyClient into mods...");
 
