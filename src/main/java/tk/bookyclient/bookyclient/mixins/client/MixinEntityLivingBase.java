@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins;
+package tk.bookyclient.bookyclient.mixins.client;
 // Created by booky10 in bookyClient (15:34 07.01.21)
 
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityLivingBase.class)
 public abstract class MixinEntityLivingBase extends Entity {
 
+    @SuppressWarnings("unused")
     public MixinEntityLivingBase(World worldIn) {
         super(worldIn);
     }

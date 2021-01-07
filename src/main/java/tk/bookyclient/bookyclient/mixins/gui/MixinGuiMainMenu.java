@@ -23,7 +23,7 @@ import java.util.List;
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 
-    private final ResourceLocation backgroundTexture = new ResourceLocation("bookyclient", "splash/background.png");
+    private final ResourceLocation backgroundTexture = new ResourceLocation("bookyclient", "textures/gui/title/background.png");
 
     @Shadow
     @Final
@@ -58,6 +58,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
 
         buttonList.add(new GuiButton(Constants.ACCOUNTS_BUTTON_ID, width / 2 - 100, height - 24, "Accounts"));
 
+        //noinspection SynchronizeOnNonFinalField
         synchronized (threadLock) {
             field_92023_s = fontRendererObj.getStringWidth(openGLWarning1);
             field_92024_r = fontRendererObj.getStringWidth(openGLWarning2);

@@ -50,5 +50,4 @@ public abstract class Key extends ClientGUI implements Serializable {
 
     }
 
-    protected abstract void renderKey(int x, int y);
 }

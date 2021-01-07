@@ -28,7 +28,6 @@ public class SpaceKey extends Key {
         return buttonCode > 0 && Keyboard.isKeyDown(buttonCode);
     }
 
-    @Override
     public void renderKey(int x, int y) {
         int yOffset = this.yOffset;
 

@@ -15,8 +15,9 @@ import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 @Mixin(GuiIngameForge.class)
 public abstract class MixinGuiIngameForge extends GuiIngame {
 
-    public MixinGuiIngameForge() {
-        super(Minecraft.getMinecraft());
+    @SuppressWarnings("unused")
+    public MixinGuiIngameForge(Minecraft mcIn) {
+        super(mcIn);
     }
 
     @Shadow(remap = false)

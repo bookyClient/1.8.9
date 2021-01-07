@@ -22,7 +22,6 @@ public class MovementKey extends Key {
         return (keyCode < 0) ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode);
     }
 
-    @Override
     public void renderKey(int x, int y) {
         Keyboard.poll();
         boolean pressed = isKeyOrMouseDown(key.getKeyCode());

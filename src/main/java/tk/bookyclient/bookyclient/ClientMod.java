@@ -11,22 +11,15 @@ import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
 
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION, acceptedMinecraftVersions = "[1.8.9]")
-public class BookyClientMod {
-
-    @Mod.Instance(Constants.MOD_ID)
-    public static BookyClientMod instance;
-    public static File mcDir;
+public class ClientMod {
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
         Constants.LOGGER.info("Pre-Loading " + Constants.MOD_NAME + "...");
-
-        Constants.createDirs();
     }
 
     @Mod.EventHandler
@@ -42,7 +35,7 @@ public class BookyClientMod {
         Constants.LOGGER.info("Post-Loading " + Constants.MOD_NAME + "...");
 
         SkinUtils.cacheSkins();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientSettings.saveSettings(false), "bookyClient Config Saver Thread"));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientSettings.saveSettings(false), Constants.MOD_NAME + " Config Saver Thread"));
 
         Constants.LOGGER.info("Starting auto config saver timer");
         new Timer().schedule(new TimerTask() {

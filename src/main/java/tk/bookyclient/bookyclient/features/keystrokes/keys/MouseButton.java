@@ -22,7 +22,6 @@ public class MouseButton extends Key {
         return button;
     }
 
-    @Override
     public void renderKey(int x, int y) {
         boolean pressed = Mouse.isButtonDown(button);
         int yOffset = this.yOffset;

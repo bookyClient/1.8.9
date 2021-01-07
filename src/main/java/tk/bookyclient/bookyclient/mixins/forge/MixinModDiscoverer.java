@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins;
+package tk.bookyclient.bookyclient.mixins.forge;
 // Created by booky10 in bookyClient (16:44 30.12.20)
 
 import net.minecraftforge.fml.common.Loader;
@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tk.bookyclient.bookyclient.BookyClientMod;
-import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.io.File;
@@ -32,20 +30,13 @@ public class MixinModDiscoverer {
     @Inject(method = "<init>", at = @At("RETURN"))
     public void onInit(CallbackInfo callbackInfo) {
         try {
-            Field mcDirField = CoreModManager.class.getDeclaredField("mcDir");
-            mcDirField.setAccessible(true);
-            File mcDir = (File) mcDirField.get(null);
-
-            BookyClientMod.mcDir = mcDir;
-            ClientSettings.loadSettings();
-
             for (String ignoredMod : CoreModManager.getIgnoredMods()) {
                 if (!ignoredMod.toLowerCase().startsWith(Constants.MOD_ID)) continue;
                 if (!ignoredMod.endsWith(".jar")) continue;
                 Constants.LOGGER.info("Trying to inject bookyClient into mods...");
 
-                File file = new File(mcDir + File.separator + "mods", ignoredMod);
-                if (!file.exists()) file = new File(mcDir + File.separator + "mods" + File.separator + "1.8.9", ignoredMod);
+                File file = new File(Constants.MINECRAFT_DIR + File.separator + "mods", ignoredMod);
+                if (!file.exists()) file = new File(Constants.MINECRAFT_DIR + File.separator + "mods" + File.separator + "1.8.9", ignoredMod);
                 if (!file.exists()) throw new FileNotFoundException(ignoredMod + " has not been found!");
 
                 ModCandidate candidate = new ModCandidate(file, file, ContainerType.JAR);

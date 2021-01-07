@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins;
+package tk.bookyclient.bookyclient.mixins.forge;
 // Created by booky10 in bookyClient (13:34 30.12.20)
 
 import com.google.common.collect.ImmutableList;
@@ -19,6 +19,7 @@ public class MixinFMLCommonHandler {
     @Shadow(remap = false)
     private List<String> brandings;
 
+    @SuppressWarnings("unused")
     @Shadow(remap = false)
     private List<String> brandingsNoMC;
 

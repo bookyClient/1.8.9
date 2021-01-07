@@ -6,6 +6,7 @@ import net.minecraft.client.resources.I18n;
 import tk.bookyclient.bookyclient.features.keystrokes.KeystrokesUtils;
 import tk.bookyclient.bookyclient.utils.gui.ClientColorSettingGUI;
 
+@SuppressWarnings("unused")
 public class KeystrokesColorSettingsGUI extends ClientColorSettingGUI {
 
     public KeystrokesColorSettingsGUI(GuiScreen parentGuiScreen) {

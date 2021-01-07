@@ -4,6 +4,7 @@ package tk.bookyclient.bookyclient.core;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
+import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.util.Map;
@@ -17,11 +18,13 @@ public class ClientFMLSetupHook implements IFMLCallHook {
     @Override
     public Void call() {
         Constants.LOGGER.info("Injecting Mixins...");
-
         MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.bookyclient.json");
+        Mixins.addConfiguration("mixins." + Constants.MOD_ID + ".json");
 
-        Constants.LOGGER.info("Successfully injected Mixins!");
+        Constants.LOGGER.info("Setting up " + Constants.MOD_NAME + "...");
+        Constants.createDirs();
+        ClientSettings.loadSettings();
+
         return null;
     }
 }

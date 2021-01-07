@@ -4,10 +4,12 @@ package tk.bookyclient.bookyclient.utils.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.awt.*;
 
+@SuppressWarnings({"EmptyMethod", "unused"})
 public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
     private final GuiScreen parentGuiScreen;
@@ -59,9 +61,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
                 @Override
                 public void updateSlider() {
-                    if (getValueInt() < 0) setValue(0);
-                    if (getValueInt() > 255) setValue(255);
-
+                    setValue(MathHelper.clamp_int(getValueInt(), 0, 255));
                     setRed(getValueInt());
                 }
             };
@@ -78,9 +78,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
                 @Override
                 public void updateSlider() {
-                    if (getValueInt() < 0) setValue(0);
-                    if (getValueInt() > 255) setValue(255);
-
+                    setValue(MathHelper.clamp_int(getValueInt(), 0, 255));
                     setGreen(getValueInt());
                 }
             };
@@ -97,9 +95,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
                 @Override
                 public void updateSlider() {
-                    if (getValueInt() < 0) setValue(0);
-                    if (getValueInt() > 255) setValue(255);
-
+                    setValue(MathHelper.clamp_int(getValueInt(), 0, 255));
                     setBlue(getValueInt());
                 }
             };
@@ -116,9 +112,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
                 @Override
                 public void updateSlider() {
-                    if (getValueInt() < 0) setValue(0);
-                    if (getValueInt() > 255) setValue(255);
-
+                    setValue(MathHelper.clamp_int(getValueInt(), 0, 255));
                     setOpacity(getValueInt());
                 }
             };

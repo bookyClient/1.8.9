@@ -9,6 +9,7 @@ import tk.bookyclient.bookyclient.utils.Constants;
 import java.io.*;
 import java.util.ArrayList;
 
+@SuppressWarnings({"CanBeFinal", "unused"})
 public class ClientSettings implements Serializable {
 
     // Main toggles

@@ -1,4 +1,5 @@
 package tk.bookyclient.bookyclient.utils.gui;
+// Created by booky10 in bookyClient (20:34 06.01.21)
 
 import java.io.Serializable;
 
@@ -11,14 +12,6 @@ public class ClientBlockGUI implements Serializable {
         this.right = right;
         this.top = top;
         this.bottom = bottom;
-    }
-
-    public int getWidth() {
-        return right - left;
-    }
-
-    public int getHeight() {
-        return bottom - top;
     }
 
     public boolean isMouseOver(int x, int y) {

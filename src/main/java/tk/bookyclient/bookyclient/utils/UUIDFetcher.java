@@ -12,14 +12,14 @@ import java.util.UUID;
 
 public class UUIDFetcher {
 
-    private static final Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
     private static final String URL = "https://playerdb.co/api/player/minecraft/%s";
 
     public static UUID getUUID(String name) {
         try {
             HttpsURLConnection connection = (HttpsURLConnection) new URL(String.format(URL, name.replace(' ', '_'))).openConnection();
-            connection.setRequestProperty("User-Agent", "MC/" + Minecraft.getMinecraft().getVersion() + "/bookyClient/" + Constants.VERSION + "/UUIDFetcher");
-            JsonObject data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), JsonObject.class);
+            connection.setRequestProperty("User-Agent", "MC/" + Minecraft.getMinecraft().getVersion() + "/" + Constants.MOD_NAME + "/" + Constants.VERSION + "/UUIDFetcher");
+            JsonObject data = GSON.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), JsonObject.class);
             return UUID.fromString(data.getAsJsonObject("data").getAsJsonObject("player").getAsJsonPrimitive("id").getAsString());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -30,8 +30,8 @@ public class UUIDFetcher {
     public static String getName(UUID uuid) {
         try {
             HttpsURLConnection connection = (HttpsURLConnection) new URL(String.format(URL, uuid.toString())).openConnection();
-            connection.setRequestProperty("User-Agent", "MC/" + Minecraft.getMinecraft().getVersion() + "/bookyClient/" + Constants.VERSION + "/UUIDFetcher");
-            JsonObject data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), JsonObject.class);
+            connection.setRequestProperty("User-Agent", "MC/" + Minecraft.getMinecraft().getVersion() + "/" + Constants.MOD_NAME + "/" + Constants.VERSION + "/UUIDFetcher");
+            JsonObject data = GSON.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), JsonObject.class);
             return data.getAsJsonObject("data").getAsJsonObject("player").getAsJsonPrimitive("username").getAsString();
         } catch (Throwable throwable) {
             throwable.printStackTrace();

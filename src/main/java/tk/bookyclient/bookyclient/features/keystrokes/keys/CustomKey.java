@@ -28,10 +28,6 @@ public class CustomKey extends Key implements Serializable {
         return block;
     }
 
-    public int getKey() {
-        return key;
-    }
-
     public void setKey(int key) {
         this.key = key;
     }
@@ -41,7 +37,6 @@ public class CustomKey extends Key implements Serializable {
         return buttonCode > 0 && Keyboard.isKeyDown(buttonCode);
     }
 
-    @Override
     public void renderKey(int x, int y) {
         Keyboard.poll();
 

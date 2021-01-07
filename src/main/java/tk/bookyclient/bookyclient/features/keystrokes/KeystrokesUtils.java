@@ -29,10 +29,6 @@ public class KeystrokesUtils {
         return 74;
     }
 
-    private static double capDouble(double valueIn, double minValue, double maxValue) {
-        return (valueIn < minValue) ? minValue : Math.min(valueIn, maxValue);
-    }
-
     public static int getRenderX() {
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         int width = getWidth(), x = settings.keystrokesX;

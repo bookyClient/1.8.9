@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins;
+package tk.bookyclient.bookyclient.mixins.network;
 // Created by booky10 in bookyClient (15:23 07.01.21)
 
 import net.minecraft.client.network.NetHandlerPlayClient;
