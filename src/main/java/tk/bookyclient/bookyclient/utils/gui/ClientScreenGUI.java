@@ -19,9 +19,4 @@ public class ClientScreenGUI extends GuiScreen {
             throw new Error(throwable);
         }
     }
-
-    @Override
-    public void onGuiClosed() {
-        ClientSettings.saveSettings(true);
-    }
 }

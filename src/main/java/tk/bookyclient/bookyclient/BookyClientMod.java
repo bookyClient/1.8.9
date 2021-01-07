@@ -12,6 +12,8 @@ import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION, acceptedMinecraftVersions = "[1.8.9]")
 public class BookyClientMod {
@@ -40,6 +42,14 @@ public class BookyClientMod {
         Constants.LOGGER.info("Post-Loading " + Constants.MOD_NAME + "...");
 
         SkinUtils.cacheSkins();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientSettings.saveSettings(false),"bookyClient Config Saver Thread"));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientSettings.saveSettings(false), "bookyClient Config Saver Thread"));
+
+        Constants.LOGGER.info("Starting auto config saver timer");
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ClientSettings.saveSettings(true);
+            }
+        }, 1000 * 5, 1000 * 10);
     }
 }
