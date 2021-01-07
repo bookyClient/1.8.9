@@ -2,14 +2,11 @@ package tk.bookyclient.bookyclient.utils.gui;
 // Created by booky10 in bookyClient (21:04 04.01.21)
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.resources.I18n;
-import tk.bookyclient.bookyclient.settings.ClientSettings;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.awt.*;
-import java.text.DecimalFormat;
 
 public abstract class ClientColorSettingGUI extends ClientScreenGUI {
 
@@ -29,7 +26,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
         this.name = name;
 
         initToggles();
-        initSliders(new DecimalFormat("###"), getOpacity() != null && getOpacity() > 100 ? 255 : 100, name.toLowerCase());
+        initSliders();
     }
 
     public ClientColorSettingGUI(GuiScreen parentGuiScreen, String name, int opacityMax) {
@@ -37,87 +34,95 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
         this.name = name;
 
         initToggles();
-        initSliders(new DecimalFormat("###"), opacityMax, name.toLowerCase());
+        initSliders();
     }
 
     private void initToggles() {
-        if (isActivated() != null)
+        if (isActivated() != null) {
             activated = new GuiButton(101, width / 2 + 5, height / 6 - 6, 150, 20, name + ": " + (isActivated() ? onI18n : offI18n));
-        if (hasChroma() != null)
-            chroma = new GuiButton(102, width / 2 + 5, height / 6 + 24 - 6, 150, 20, "Chroma: " + (hasChroma() ? onI18n : offI18n));
+        }
+
+        if (hasChroma() != null) {
+            chroma = new GuiButton(102, width / 2 + 5, height / 6 + 18, 150, 20, I18n.format("client.colors.chroma") + " " + (hasChroma() ? onI18n : offI18n));
+        }
     }
 
-    private void initSliders(DecimalFormat format, Integer opacityMax, String name) {
-        if (getRed() != null)
-            red = new GuiSlider(new GuiPageButtonList.GuiResponder() {
-                @Override
-                public void func_175321_a(int p_175321_1_, boolean p_175321_2_) {
-                }
+    private void initSliders() {
+        if (getRed() != null) {
+            red = new GuiSlider(
+                    103,
+                    width / 2 - 155, height / 6 + 42,
+                    150, 20,
+                    I18n.format("client.colors.red") + " ", "",
+                    0, 255, getRed(),
+                    false, true) {
 
                 @Override
-                public void onTick(int id, float value) {
-                    setRed((int) value);
+                public void updateSlider() {
+                    if (getValueInt() < 0) setValue(0);
+                    if (getValueInt() > 255) setValue(255);
+
+                    setRed(getValueInt());
                 }
+            };
+        }
+
+        if (getGreen() != null) {
+            green = new GuiSlider(
+                    104,
+                    width / 2 + 5, height / 6 + 42,
+                    150, 20,
+                    I18n.format("client.colors.green") + " ", "",
+                    0, 255, getGreen(),
+                    false, true) {
 
                 @Override
-                public void func_175319_a(int p_175319_1_, String p_175319_2_) {
+                public void updateSlider() {
+                    if (getValueInt() < 0) setValue(0);
+                    if (getValueInt() > 255) setValue(255);
+
+                    setGreen(getValueInt());
                 }
-            }, 103, width / 2 - 155, height / 6 + 48 - 6, name + "_red", 0F,
-                    255F, getRed(), (id, oldName, value) -> I18n.format("client.colors.red", format.format(value)));
-        if (getGreen() != null)
-            green = new GuiSlider(new GuiPageButtonList.GuiResponder() {
-                @Override
-                public void func_175321_a(int p_175321_1_, boolean p_175321_2_) {
-                }
+            };
+        }
+
+        if (getBlue() != null) {
+            blue = new GuiSlider(
+                    105,
+                    width / 2 - 155, height / 6 + 66,
+                    150, 20,
+                    I18n.format("client.colors.blue") + " ", "",
+                    0, 255, getBlue(),
+                    false, true) {
 
                 @Override
-                public void onTick(int id, float value) {
-                    setGreen((int) value);
+                public void updateSlider() {
+                    if (getValueInt() < 0) setValue(0);
+                    if (getValueInt() > 255) setValue(255);
+
+                    setBlue(getValueInt());
                 }
+            };
+        }
+
+        if (getOpacity() != null) {
+            opacity = new GuiSlider(
+                    106,
+                    width / 2 - 155, height / 6 + 90,
+                    150, 20,
+                    I18n.format("client.colors.opacity") + " ", "",
+                    0, 255, getOpacity(),
+                    false, true) {
 
                 @Override
-                public void func_175319_a(int p_175319_1_, String p_175319_2_) {
-                }
-            }, 104, width / 2 + 5,
-                    height / 6 + 48 - 6, name + "_green", 0F,
-                    255F, getGreen(), (id, oldName, value) -> I18n.format("client.colors.green", format.format(value)));
-        if (getBlue() != null)
-            blue = new GuiSlider(new GuiPageButtonList.GuiResponder() {
-                @Override
-                public void func_175321_a(int p_175321_1_, boolean p_175321_2_) {
-                }
+                public void updateSlider() {
+                    if (getValueInt() < 0) setValue(0);
+                    if (getValueInt() > 255) setValue(255);
 
-                @Override
-                public void onTick(int id, float value) {
-                    setBlue((int) value);
+                    setOpacity(getValueInt());
                 }
-
-                @Override
-                public void func_175319_a(int p_175319_1_, String p_175319_2_) {
-                }
-            }, 105, width / 2 - 155,
-                    height / 6 + 72 - 6, name + "_blue", 0F,
-                    255F, getBlue(), (id, oldName, value) -> I18n.format("client.colors.blue", format.format(value)));
-        if (getOpacity() != null)
-            opacity = new GuiSlider(new GuiPageButtonList.GuiResponder() {
-                @Override
-                public void func_175321_a(int p_175321_1_, boolean p_175321_2_) {
-                }
-
-                @Override
-                public void onTick(int id, float value) {
-                    setOpacity((int) value);
-                }
-
-                @Override
-                public void func_175319_a(int p_175319_1_, String p_175319_2_) {
-                }
-            }, 106, width / 2 - 155,
-                    height / 6 + 96 - 6, name + "_opacity", 0F,
-                    opacityMax, getOpacity(), (id, oldName, value) -> {
-                if (value <= 0) return I18n.format("client.colors.opacity", offI18n);
-                else return I18n.format("client.colors.opacity", format.format(value));
-            });
+            };
+        }
     }
 
     @Override
@@ -125,37 +130,37 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
         // Setting values
         if (activated != null) {
             activated.xPosition = width / 2 - 75;
-            activated.yPosition = height / 6 + 24 - 6;
+            activated.yPosition = height / 6 + 18;
         }
 
         if (chroma != null) {
             chroma.enabled = activated == null || isActivated();
             chroma.xPosition = width / 2 - 75;
-            chroma.yPosition = height / 6 + 48 - 6;
+            chroma.yPosition = height / 6 + 42;
         }
 
         if (red != null) {
             red.enabled = (activated == null || isActivated()) && (chroma == null || !hasChroma());
             red.xPosition = width / 2 - 75;
-            red.yPosition = height / 6 + 72 - 6;
+            red.yPosition = height / 6 + 66;
         }
 
         if (green != null) {
             green.enabled = (activated == null || isActivated()) && (chroma == null || !hasChroma());
             green.xPosition = width / 2 - 75;
-            green.yPosition = height / 6 + 96 - 6;
+            green.yPosition = height / 6 + 90;
         }
 
         if (blue != null) {
             blue.enabled = (activated == null || isActivated()) && (chroma == null || !hasChroma());
             blue.xPosition = width / 2 - 75;
-            blue.yPosition = height / 6 + 120 - 6;
+            blue.yPosition = height / 6 + 114;
         }
 
         if (opacity != null) {
             opacity.enabled = (activated == null || isActivated()) && usingOpacity;
             opacity.xPosition = width / 2 - 75;
-            opacity.yPosition = height / 6 + 144 - 6;
+            opacity.yPosition = height / 6 + 138;
         }
 
         buttonList.clear();
@@ -178,6 +183,7 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
     protected void actionPerformed(GuiButton button) {
         if (!button.enabled) return;
         if (button.id == 100) mc.displayGuiScreen(parentGuiScreen);
+
         else if (button.id == 101) {
             setActivated(!isActivated());
 
@@ -191,13 +197,12 @@ public abstract class ClientColorSettingGUI extends ClientScreenGUI {
         } else if (button.id == 102) {
             setChroma(!hasChroma());
 
-            button.displayString = "Chroma: " + (hasChroma() ? onI18n : offI18n);
+            button.displayString = I18n.format("client.colors.chroma") + " " + (hasChroma() ? onI18n : offI18n);
 
             if (red != null) red.enabled = (activated == null || isActivated()) && (chroma == null || !hasChroma());
             if (green != null) green.enabled = (activated == null || isActivated()) && (chroma == null || !hasChroma());
             if (blue != null) blue.enabled = (activated == null || isActivated()) && (chroma == null || !hasChroma());
         }
-        ClientSettings.saveSettings(true);
     }
 
     @Override
