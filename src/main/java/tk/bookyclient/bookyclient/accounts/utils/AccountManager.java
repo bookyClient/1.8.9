@@ -89,8 +89,12 @@ public class AccountManager {
     }
 
     private void setSession(Session session) throws ReflectiveOperationException {
-        Field field = Minecraft.class.getDeclaredField("session");
-        field.setAccessible(true);
-        field.set(Minecraft.getMinecraft(), session);
+        for (Field field : minecraft.getClass().getDeclaredFields()) {
+            if (!field.getType().isInstance(session)) continue;
+
+            field.setAccessible(true);
+            field.set(minecraft, session);
+            break;
+        }
     }
 }
