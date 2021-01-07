@@ -53,6 +53,8 @@ keystrokes.reach.none=None
 keystrokes.reach.format=%s blocks
 
 # Client
+client.date=dd.MM.yyyy
+
 client.gui.prefix=Client Settings
 client.gui.name=Client Settings...
 

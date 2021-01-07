@@ -15,7 +15,6 @@ import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
 import tk.bookyclient.bookyclient.accounts.utils.AccountManager;
 import tk.bookyclient.bookyclient.utils.HTTPTools;
 
-import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,14 +28,13 @@ public class AccountSelectorGUI extends GuiScreen {
     private ArrayList<ExtendedAccountData> accounts = convertData();
     private AccountList accountGUI;
 
-    private GuiButton login, offlineLogin, delete, edit, add, cancel;
+    private GuiButton login, offlineLogin, delete, edit;
 
     private String query;
     private GuiTextField search;
 
     @Override
     public void initGui() {
-        SkinUtils.cacheSkins();
         Keyboard.enableRepeatEvents(true);
 
         accountGUI = new AccountList(mc);
@@ -51,20 +49,20 @@ public class AccountSelectorGUI extends GuiScreen {
         buttonList.add(edit = new GuiButton(7, width / 2 - 44, height - 52, 100, 20, I18n.format("accounts.edit")));
         buttonList.add(delete = new GuiButton(4, width / 2 - 44, height - 28, 100, 20, I18n.format("accounts.delete")));
 
-        buttonList.add(add = new GuiButton(0, width / 2 + 64, height - 52, 100, 20, I18n.format("accounts.addaccount")));
-        buttonList.add(cancel = new GuiButton(3, width / 2 + 64, height - 28, 100, 20, I18n.format("gui.cancel")));
+        buttonList.add(new GuiButton(0, width / 2 + 64, height - 52, 100, 20, I18n.format("accounts.addaccount")));
+        buttonList.add(new GuiButton(3, width / 2 + 64, height - 28, 100, 20, I18n.format("gui.cancel")));
 
         search = new GuiTextField(8, fontRendererObj, width / 2 - 80, 14, 160, 16);
         search.setText(query);
-        search.setTextColor(new Color(0xA5A5A5).getRGB());
+        search.setTextColor(0xA5A5A5);
 
         updateButtons();
+        SkinUtils.cacheSkins();
     }
 
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-
         accountGUI.handleMouseInput();
     }
 
@@ -116,28 +114,25 @@ public class AccountSelectorGUI extends GuiScreen {
         accountGUI.drawScreen(mouseX, mouseY, partialTicks);
         drawCenteredString(fontRendererObj, I18n.format("accounts.selectaccount"), width / 2, 4, -1);
 
-        if (failedLogin != null)
-            drawCenteredString(fontRendererObj, failedLogin.getLocalizedMessage(), width / 2, height - 62, 16737380);
+        if (failedLogin != null) drawCenteredString(fontRendererObj, failedLogin.getLocalizedMessage(), width / 2, height - 62, 16737380);
         search.drawTextBox();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+        if (accounts.isEmpty()) return;
 
-        if (!accounts.isEmpty()) {
-            SkinUtils.drawSkin(8, height / 2 - 64 - 16, 64, 128);
-            drawBorderedRect(width - 8 - 128, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
+        SkinUtils.drawSkin(8, height / 2 - 64 - 16, 64, 128);
+        drawBorderedRect(width - 8 - 128, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
 
-            if (accounts.get(selectedAccountIndex).premium)
-                drawString(fontRendererObj, "§l§n" + I18n.format("accounts.premium"), width - 8 - 125, height / 2 - 64 - 13, 6618980);
-            else
-                drawString(fontRendererObj, "§l§n" + I18n.format("accounts.notpremium"), width - 8 - 125, height / 2 - 64 - 13, 16737380);
+        if (accounts.get(selectedAccountIndex).premium)
+            drawString(fontRendererObj, "§l§n" + I18n.format("accounts.premium"), width - 8 - 125, height / 2 - 64 - 13, 6618980);
+        else
+            drawString(fontRendererObj, "§l§n" + I18n.format("accounts.notpremium"), width - 8 - 125, height / 2 - 64 - 13, 16737380);
 
-            drawString(fontRendererObj, I18n.format("accounts.timesused", accounts.get(selectedAccountIndex).useCount), width - 8 - 125, height / 2 - 64 - 15 + 21, -1);
+        drawString(fontRendererObj, I18n.format("accounts.timesused", accounts.get(selectedAccountIndex).useCount), width - 8 - 125, height / 2 - 64 - 15 + 21, -1);
+        if (accounts.get(selectedAccountIndex).useCount <= 0) return;
 
-            if (accounts.get(selectedAccountIndex).useCount > 0) {
-                drawString(fontRendererObj, I18n.format("accounts.lastused"), width - 8 - 125, height / 2 - 64 - 15 + 30, -1);
-                drawString(fontRendererObj, "  " + getFormattedDate(), width - 8 - 125, height / 2 - 64 - 15 + 39, -1);
-            }
-        }
+        drawString(fontRendererObj, I18n.format("accounts.lastused"), width - 8 - 125, height / 2 - 64 - 15 + 30, -1);
+        drawString(fontRendererObj, "  " + getFormattedDate(), width - 8 - 125, height / 2 - 64 - 15 + 39, -1);
     }
 
     @Override
@@ -261,7 +256,8 @@ public class AccountSelectorGUI extends GuiScreen {
 
         int index = 0;
         for (AccountData data : unconverted) {
-            if (data instanceof ExtendedAccountData) converted.add((ExtendedAccountData) data);
+            if (data instanceof ExtendedAccountData)
+                converted.add((ExtendedAccountData) data);
             else {
                 converted.add(new ExtendedAccountData(EncryptionTools.decode(data.user), EncryptionTools.decode(data.password), data.alias));
                 AccountDatabase.getInstance().getAccounts().set(index, new ExtendedAccountData(EncryptionTools.decode(data.user), EncryptionTools.decode(data.password), data.alias));
@@ -331,7 +327,7 @@ public class AccountSelectorGUI extends GuiScreen {
             String alias = data.alias;
 
             if (StringUtils.isEmpty(alias)) alias = I18n.format("accounts.account", entryID + 1);
-            int color = 16777215;
+            int color = 0xFFFFFF;
             if (Minecraft.getMinecraft().getSession().getUsername().equals(data.alias)) color = 0x00FF00;
 
             if (alias.contains("@")) {
@@ -346,8 +342,7 @@ public class AccountSelectorGUI extends GuiScreen {
     }
 
     private String getFormattedDate() {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        return format.format(new Date());
+        return new SimpleDateFormat(I18n.format("client.date")).format(new Date());
     }
 
     private void drawBorderedRect(int x, int y, int x1, int y1, int size, int borderColor, int insideColor) {
