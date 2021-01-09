@@ -18,7 +18,7 @@ public class ClientSettings implements Serializable {
     public boolean clearChatBar = false;
     public boolean clearScoreboardBackground = false;
     public boolean hideScoreboardRedScores = false;
-    public boolean FOVModifier = false;
+    public boolean fovModifier = false;
     public boolean asyncScreenshots = true;
     public boolean crashScreen = true;
     public boolean numeralPing = false;
