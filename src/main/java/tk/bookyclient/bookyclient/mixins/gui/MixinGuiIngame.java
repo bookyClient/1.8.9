@@ -27,9 +27,8 @@ public class MixinGuiIngame extends Gui {
         if (mc.gameSettings.thirdPersonView != 0) returnable.setReturnValue(false);
     }
 
-    @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawRect(IIIII)V"))
+    @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawRect(IIIII)V"), expect = 3)
     public void onDrawRect(int left, int top, int right, int bottom, int color) {
-        if (settings.clearScoreboardBackground) return;
-        drawRect(left, top, right, bottom, color);
+        drawRect(left, top, right, bottom, settings.clearScoreboardBackground ? 0 : color);
     }
 }
