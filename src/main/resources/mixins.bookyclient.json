@@ -16,6 +16,7 @@
     "gui.MixinGuiIngameForge",
     "gui.MixinGuiMainMenu",
     "gui.MixinGuiMultiplayer",
+    "gui.MixinGuiNewChat",
     "gui.MixinGuiOptions",
     "network.MixinNetHandlerPlayClient"
   ],
