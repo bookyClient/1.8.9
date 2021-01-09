@@ -58,8 +58,9 @@ public abstract class AbstractAccountGUI extends GuiScreen {
 
     @Override
     protected void keyTyped(char character, int keyIndex) {
-        if (keyIndex == Keyboard.KEY_ESCAPE) escape();
-        else if (keyIndex == Keyboard.KEY_RETURN) {
+        if (keyIndex == Keyboard.KEY_ESCAPE) {
+            escape();
+        } else if (keyIndex == Keyboard.KEY_RETURN) {
             if (username.isFocused()) {
                 username.setFocused(false);
                 password.setFocused(true);
@@ -90,7 +91,9 @@ public abstract class AbstractAccountGUI extends GuiScreen {
         if (button.enabled) if (button.id == 2) {
             complete();
             escape();
-        } else if (button.id == 3) escape();
+        } else if (button.id == 3) {
+            escape();
+        }
     }
 
     @Override
