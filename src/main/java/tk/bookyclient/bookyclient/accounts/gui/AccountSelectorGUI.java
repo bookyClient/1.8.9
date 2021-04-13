@@ -80,7 +80,8 @@ public class AccountSelectorGUI extends GuiScreen {
     }
 
     private void updateShownSkin() {
-        if (!accounts.isEmpty()) SkinUtils.buildSkin(accounts.get(selectedAccountIndex).alias);
+        if (accounts.isEmpty()) return;
+        SkinUtils.buildSkin(accounts.get(selectedAccountIndex).alias);
     }
 
     @Override
@@ -119,18 +120,15 @@ public class AccountSelectorGUI extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (accounts.isEmpty()) return;
+        ExtendedAccountData account = accounts.get(selectedAccountIndex);
 
         SkinUtils.drawSkin(8, height / 2 - 64 - 16, 64, 128);
         drawBorderedRect(width - 8 - 128, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
 
-        if (accounts.get(selectedAccountIndex).premium)
-            drawString(fontRendererObj, "§l§n" + I18n.format("accounts.premium"), width - 8 - 125, height / 2 - 64 - 13, 6618980);
-        else
-            drawString(fontRendererObj, "§l§n" + I18n.format("accounts.notpremium"), width - 8 - 125, height / 2 - 64 - 13, 16737380);
+        drawString(fontRendererObj, "§l§n" + I18n.format("accounts." + (account.premium ? "" : "not") + "premium"), width - 8 - 125, height / 2 - 64 - 13, account.premium ? 6618980 : 16737380);
+        drawString(fontRendererObj, I18n.format("accounts.timesused", account.useCount), width - 8 - 125, height / 2 - 64 - 15 + 21, -1);
 
-        drawString(fontRendererObj, I18n.format("accounts.timesused", accounts.get(selectedAccountIndex).useCount), width - 8 - 125, height / 2 - 64 - 15 + 21, -1);
-        if (accounts.get(selectedAccountIndex).useCount <= 0) return;
-
+        if (account.useCount <= 0) return;
         drawString(fontRendererObj, I18n.format("accounts.lastused"), width - 8 - 125, height / 2 - 64 - 15 + 30, -1);
         drawString(fontRendererObj, "  " + getFormattedDate(), width - 8 - 125, height / 2 - 64 - 15 + 39, -1);
     }
@@ -202,6 +200,10 @@ public class AccountSelectorGUI extends GuiScreen {
             } else if (HTTPTools.ping("http://minecraft.net")) {
                 getCurrentAsEditable().premium = false;
             }
+
+            Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(this));
+        }, "Authentication Thread").start();
+    }
 
     private void edit() {
         mc.displayGuiScreen(new EditAccountGUI(selectedAccountIndex));

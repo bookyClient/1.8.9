@@ -123,10 +123,9 @@ public class ClientSettings implements Serializable {
 
                 if (instance == null) {
                     StringBuilder builder = new StringBuilder();
-                    int character;
 
-                    while ((character = reader.read()) != -1)
-                        builder.append((char) character);
+                    int character;
+                    while ((character = reader.read()) != -1) builder.append((char) character);
 
                     String replaced = builder.toString().replace("\n", "");
                     if (replaced.equals("null") || replaced.isEmpty()) {
@@ -137,8 +136,9 @@ public class ClientSettings implements Serializable {
                         saveSettings(false);
 
                         Constants.LOGGER.info("Recover successful, but all settings got cleared!");
-                    } else
+                    } else {
                         throw new IllegalStateException("Error while reading config:\n" + builder);
+                    }
                 }
             } catch (IOException exception) {
                 throw new Error(exception);

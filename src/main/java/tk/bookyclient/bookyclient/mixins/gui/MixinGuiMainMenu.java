@@ -44,6 +44,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
 
     /**
      * @author booky10
+     * @reason Overwrite initGui method to allow removing parts, which are not needed
      */
     @Overwrite
     public void initGui() {
@@ -72,6 +73,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
 
     /**
      * @author booky10
+     * @reason No need for updating some values which don't get used
      */
     @Overwrite
     public void updateScreen() {
@@ -92,6 +94,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
 
     /**
      * @author booky10
+     * @reason Overwrite drawScreen method, because I want a better title screen
      */
     @Overwrite
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {

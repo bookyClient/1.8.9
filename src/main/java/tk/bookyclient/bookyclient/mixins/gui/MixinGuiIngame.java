@@ -26,7 +26,8 @@ public class MixinGuiIngame extends Gui {
 
     @Inject(method = "showCrosshair", at = @At("HEAD"), cancellable = true)
     public void onShowCrosshair(CallbackInfoReturnable<Boolean> returnable) {
-        if (mc.gameSettings.thirdPersonView != 0) returnable.setReturnValue(false);
+        if (mc.gameSettings.thirdPersonView == 0) return;
+        returnable.setReturnValue(false);
     }
 
     @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawRect(IIIII)V"), expect = 3)

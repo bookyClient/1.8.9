@@ -21,7 +21,7 @@ public abstract class MixinEntityLivingBase extends Entity {
 
     @Inject(method = "getLook", at = @At("HEAD"), cancellable = true)
     public void onGetLook(float partialTicks, CallbackInfoReturnable<Vec3> returnable) {
-        if (getClass().getName().equals(EntityPlayerSP.class.getName()))
-            returnable.setReturnValue(super.getLook(partialTicks));
+        if (!getClass().getName().equals(EntityPlayerSP.class.getName())) return;
+        returnable.setReturnValue(super.getLook(partialTicks));
     }
 }
