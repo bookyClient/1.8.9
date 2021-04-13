@@ -68,7 +68,7 @@ public class ClientSettings implements Serializable {
     public int wingsRed = 255;
     public int wingsGreen = 255;
     public int wingsBlue = 255;
-    public int wingsOpacity = 100;
+    public int wingsOpacity = 255;
 
     // Creeper Armor
     public boolean creeperArmor = false;
@@ -76,7 +76,7 @@ public class ClientSettings implements Serializable {
     public int creeperArmorRed = 255;
     public int creeperArmorGreen = 255;
     public int creeperArmorBlue = 255;
-    public int creeperArmorOpacity = 100;
+    public int creeperArmorOpacity = 255;
 
     // Wither Armor
     public boolean witherArmor = false;
@@ -84,7 +84,7 @@ public class ClientSettings implements Serializable {
     public int witherArmorRed = 255;
     public int witherArmorGreen = 255;
     public int witherArmorBlue = 255;
-    public int witherArmorOpacity = 100;
+    public int witherArmorOpacity = 255;
 
     // Blaze Rods
     public boolean blazeRods = false;
@@ -92,7 +92,7 @@ public class ClientSettings implements Serializable {
     public int blazeRodsRed = 255;
     public int blazeRodsGreen = 255;
     public int blazeRodsBlue = 255;
-    public int blazeRodsOpacity = 100;
+    public int blazeRodsOpacity = 255;
 
     // Old Animations
     public boolean oldAnimations = false;
