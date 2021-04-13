@@ -184,19 +184,24 @@ public class AccountSelectorGUI extends GuiScreen {
     }
 
     public void login(Integer selected) {
-        ExtendedAccountData data = accounts.get(selected);
-        failedLogin = AccountManager.getInstance().setUser(data.user, data.password);
+        Minecraft.getMinecraft().displayGuiScreen(new LoggingInGUI());
 
-        if (failedLogin == null) {
-            Minecraft.getMinecraft().displayGuiScreen(null);
-            ExtendedAccountData current = getCurrentAsEditable();
+        new Thread(() -> {
+            ExtendedAccountData data = accounts.get(selected);
+            failedLogin = AccountManager.getInstance().setUser(data.user, data.password);
 
-            current.premium = true;
-            current.useCount++;
-            current.lastUsed = System.currentTimeMillis();
-        } else if (HTTPTools.ping("http://minecraft.net"))
-            getCurrentAsEditable().premium = false;
-    }
+            if (failedLogin == null) {
+                ExtendedAccountData current = getCurrentAsEditable();
+
+                current.premium = true;
+                current.useCount++;
+                current.lastUsed = System.currentTimeMillis();
+
+                Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
+                return;
+            } else if (HTTPTools.ping("http://minecraft.net")) {
+                getCurrentAsEditable().premium = false;
+            }
 
     private void edit() {
         mc.displayGuiScreen(new EditAccountGUI(selectedAccountIndex));

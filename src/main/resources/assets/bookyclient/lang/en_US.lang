@@ -20,6 +20,7 @@ accounts.alreadylogged=You are already logged in to this account.
 accounts.reloadskins=Reload Skins
 accounts.accounts=Accounts
 accounts.offlinelogin=Offline Login
+accounts.logging=Logging in...
 
 # Keystrokes
 keystrokes.gui.main.title=Keystrokes
