@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class HTTPTools {
+public class Utilities {
 
     public static boolean ping(String url) {
         try {

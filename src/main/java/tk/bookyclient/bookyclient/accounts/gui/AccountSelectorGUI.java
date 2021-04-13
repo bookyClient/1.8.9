@@ -13,7 +13,7 @@ import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
 import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
 import tk.bookyclient.bookyclient.accounts.utils.AccountManager;
-import tk.bookyclient.bookyclient.utils.HTTPTools;
+import tk.bookyclient.bookyclient.utils.Utilities;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -197,7 +197,7 @@ public class AccountSelectorGUI extends GuiScreen {
 
                 Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
                 return;
-            } else if (HTTPTools.ping("http://minecraft.net")) {
+            } else if (Utilities.ping("http://minecraft.net")) {
                 getCurrentAsEditable().premium = false;
             }
 
