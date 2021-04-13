@@ -3,14 +3,10 @@ package tk.bookyclient.bookyclient.mixins.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraftforge.client.GuiIngameForge;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
-import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.PLAYER_LIST;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(GuiIngameForge.class)
 public abstract class MixinGuiIngameForge extends GuiIngame {
@@ -20,27 +16,8 @@ public abstract class MixinGuiIngameForge extends GuiIngame {
         super(mcIn);
     }
 
-    @Shadow(remap = false)
-    protected abstract void post(RenderGameOverlayEvent.ElementType type);
-
-    @Shadow(remap = false)
-    protected abstract boolean pre(RenderGameOverlayEvent.ElementType type);
-
-    /**
-     * @author booky10
-     */
-    @Overwrite(remap = false)
-    protected void renderPlayerList(int width, int height) {
-        ScoreObjective scoreobjective = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(0);
-
-        if (mc.gameSettings.keyBindPlayerList.isKeyDown()) {
-            overlayPlayerList.updatePlayerList(true);
-            if (pre(PLAYER_LIST)) return;
-
-            overlayPlayerList.renderPlayerlist(width, mc.theWorld.getScoreboard(), scoreobjective);
-
-            post(PLAYER_LIST);
-        } else
-            overlayPlayerList.updatePlayerList(false);
+    @Redirect(method = "renderPlayerList", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;isIntegratedServerRunning()Z"))
+    public boolean onIntegratedRunning(Minecraft minecraft) {
+        return false;
     }
 }
