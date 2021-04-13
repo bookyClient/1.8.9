@@ -8,16 +8,15 @@ import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import tk.bookyclient.bookyclient.ClientMod;
 import tk.bookyclient.bookyclient.features.WindowedFullscreen;
 import tk.bookyclient.bookyclient.features.keystrokes.KeystrokesUtils;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 @Mixin(Minecraft.class)
-public class MixinMinecraft {
+public abstract class MixinMinecraft {
 
     @Shadow
     private boolean fullscreen;
@@ -26,9 +25,12 @@ public class MixinMinecraft {
     @Final
     public Profiler mcProfiler;
 
-    @Redirect(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V", remap = false))
-    private void onDisplaySetTitle(String title) {
-        Display.setTitle(Constants.MOD_NAME + " " + Constants.VERSION + " (" + title + ")");
+    @Shadow
+    public abstract String getVersion();
+
+    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createDisplay()V", shift = At.Shift.AFTER, by = 1))
+    private void onDisplaySetTitle(CallbackInfo callbackInfo) {
+        Display.setTitle(Constants.MOD_NAME + " " + Constants.VERSION + " (" + getVersion() + ")");
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
