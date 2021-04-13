@@ -5,12 +5,12 @@
   "refmap": "mixins.bookyclient.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "client.MinecraftAccessor",
     "client.MixinEntity",
     "client.MixinEntityLivingBase",
     "client.MixinEntityRenderer",
     "client.MixinMinecraft",
     "forge.MixinFMLCommonHandler",
-    "forge.MixinModDiscoverer",
     "gui.MixinGui",
     "gui.MixinGuiChat",
     "gui.MixinGuiIngame",
@@ -26,5 +26,8 @@
   },
   "overwrites": {
     "conformVisibility": true
-  }
+  },
+  "client": [
+    "gui.MixinGuiIngame"
+  ]
 }

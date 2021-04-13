@@ -1,39 +1,35 @@
 package tk.bookyclient.bookyclient;
 // Created by booky10 in bookyClient (19:14 29.12.20)
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.client.Minecraft;
 import tk.bookyclient.bookyclient.accounts.encryption.Standards;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
 import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
+import tk.bookyclient.bookyclient.mixins.client.MinecraftAccessor;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
+import tk.bookyclient.bookyclient.utils.ClientResourcePack;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION, acceptedMinecraftVersions = "[1.8.9]")
 public class ClientMod {
 
-    @Mod.EventHandler
-    public void onPreInit(FMLPreInitializationEvent event) {
+    public static void preStart(Minecraft minecraft) {
         Constants.LOGGER.info("Pre-Loading " + Constants.MOD_NAME + "...");
 
+        ((MinecraftAccessor) minecraft).getDefaultResourcePacks().add(ClientResourcePack.getInstance());
         ClientSettings.loadSettings();
     }
 
-    @Mod.EventHandler
-    public void onInit(FMLInitializationEvent event) {
+    public static void start() {
         Constants.LOGGER.info("Loading " + Constants.MOD_NAME + "...");
 
         AccountConfig.readFromFile();
         Standards.importAccounts();
     }
 
-    @Mod.EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) {
+    public static void postStart() {
         Constants.LOGGER.info("Post-Loading " + Constants.MOD_NAME + "...");
 
         SkinUtils.cacheSkins();

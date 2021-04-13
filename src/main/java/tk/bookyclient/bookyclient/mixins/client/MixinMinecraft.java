@@ -51,4 +51,24 @@ public class MixinMinecraft {
         mcProfiler.endSection();
         mcProfiler.endSection();
     }
+
+    @Inject(method = "startGame", at = @At("HEAD"))
+    public void preStart(CallbackInfo callbackInfo) {
+        ClientMod.preStart(Minecraft.getMinecraft());
+    }
+
+    @Inject(method = "startGame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;textureMapBlocks:Lnet/minecraft/client/renderer/texture/TextureMap;", shift = At.Shift.BEFORE, ordinal = 0))
+    public void start(CallbackInfo callbackInfo) {
+        ClientMod.start();
+    }
+
+    @Inject(method = "startGame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;ingameGUI:Lnet/minecraft/client/gui/GuiIngame;", shift = At.Shift.BEFORE))
+    public void postStart(CallbackInfo callbackInfo) {
+        ClientMod.postStart();
+    }
+
+    @ModifyConstant(method = "getLimitFramerate", constant = @Constant(intValue = 30))
+    public int onMenuFrameLimit(int original) {
+        return 60;
+    }
 }
