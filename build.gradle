@@ -1,12 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
-        mavenLocal()
         mavenCentral()
 
         maven { url 'https://files.minecraftforge.net/maven' }
-        maven { url 'https://plugins.gradle.org/m2' }
         maven { url 'https://repo.spongepowered.org/maven' }
+        maven { url 'https://plugins.gradle.org/m2' }
     }
 
     dependencies {
@@ -74,27 +72,16 @@ minecraft {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
-    jcenter()
 
     maven { url 'https://jitpack.io' }
     maven { url 'https://repo.spongepowered.org/maven/' }
 }
 
 dependencies {
-    compile('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
-        exclude module: 'launchwrapper'
-    }
+    compile('org.spongepowered:mixin:0.7.10-SNAPSHOT') { exclude module: 'launchwrapper' }
 
     compile 'com.jagrosh:DiscordIPC:0.4'
-    compile('commons-io:commons-io') {
-        version {
-            strictly '2.5'
-        }
-    }
-
-    compile fileTree(include: ['*.jar'], dir: 'libs')
 }
 
 processResources {
@@ -120,44 +107,30 @@ mixin {
     add sourceSets.main, mod_mixin_configs.replace('${mod_id}', mod_id).replace('.json', '.refmap.json')
 }
 
-task replaceConstants << {
-    def version = project.version
-    ant.replaceregexp(match: 'CURRENT_VERSION', replace: version, flags: 'g', byline: true) {
-        fileset(dir: 'src/main/java/tk/bookyclient/bookyclient/utils', includes: 'Constants.java')
-    }
-}
-
-task undoReplaceConstants << {
-    def version = project.version
-    ant.replaceregexp(match: version, replace: 'CURRENT_VERSION', flags: 'g', byline: true) {
-        fileset(dir: 'src/main/java/tk/bookyclient/bookyclient/utils', includes: 'Constants.java')
-    }
-}
-
 jar {
-    manifest.attributes(
-            'Manifest-Version': 1.0,
-            'ModSide': 'CLIENT',
-            'FMLCorePluginContainsFMLMod': 'Yes, yes it does',
-            'FMLAT': mod_access_transformer.replace('${mod_id}', mod_id),
-            'FMLCorePlugin': mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id),
+    manifest {
+        attributes(
+                'Manifest-Version': 1.0,
+                'ModSide': 'CLIENT',
+                'FMLCorePluginContainsFMLMod': 'Yes, yes it does',
+                'FMLAT': mod_access_transformer.replace('${mod_id}', mod_id),
+                'FMLCorePlugin': mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id),
 
-            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
-            'TweakOrder': '0',
-            'MixinConfigs': mod_mixin_configs.replace('${mod_id}', mod_id),
-    )
+                'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'TweakOrder': '0',
+                'MixinConfigs': mod_mixin_configs.replace('${mod_id}', mod_id),
+
+                'Implementation-Title': getRootProject().getName(),
+                'Implementation-Version': getProject().getVersion(),
+                'Implementation-Vendor': 'booky10',
+        )
+    }
 }
 
 shadowJar {
     dependencies {
         include(dependency('org.spongepowered:mixin'))
         include(dependency('com.jagrosh:DiscordIPC'))
-        include(dependency('org.json:json'))
-        include(dependency('org.slf4j:slf4j-api'))
-        include(dependency('log4j:log4j:1.2.17'))
-        include(dependency('org.scijava:native-lib-loader'))
-        include(dependency('com.kohlschutter.junixsocket:junixsocket-common'))
-        include(dependency('com.kohlschutter.junixsocket:junixsocket-native-common'))
     }
 
     exclude 'dummyThing'
@@ -167,21 +140,10 @@ shadowJar {
 }
 
 reobf { shadowJar { mappingType = 'SEARGE' } }
+build { dependsOn shadowJar }
 tasks.reobfShadowJar.mustRunAfter shadowJar
 
 configurations {
     external
     compile.extendsFrom external
-}
-
-build {
-    dependsOn shadowJar
-}
-
-compileJava {
-    dependsOn replaceConstants
-}
-
-jar {
-    dependsOn undoReplaceConstants
 }

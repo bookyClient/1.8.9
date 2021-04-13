@@ -11,9 +11,11 @@ import java.util.Random;
 
 public final class Constants {
 
-    public static final String MOD_ID = "bookyclient";
-    public static final String MOD_NAME = "bookyClient";
-    public static final String VERSION = "CURRENT_VERSION";
+    public static final boolean DEBUG = Constants.class.getPackage().getImplementationTitle() == null;
+
+    public static final String VERSION = DEBUG ? "DEV" : Constants.class.getPackage().getImplementationVersion();
+    public static final String MOD_NAME = DEBUG ? "bookyClient" : Constants.class.getPackage().getImplementationTitle();
+    public static final String MOD_ID = MOD_NAME.toLowerCase();
 
     public static final File MINECRAFT_DIR = (Launch.minecraftHome == null ? new File(".") : Launch.minecraftHome);
     public static final File CLIENT_DIR = new File(MINECRAFT_DIR, MOD_NAME);
