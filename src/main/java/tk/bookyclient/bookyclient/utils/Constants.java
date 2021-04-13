@@ -2,6 +2,9 @@ package tk.bookyclient.bookyclient.utils;
 // Created by booky10 in bookyClient (19:12 29.12.20)
 
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.fml.common.DummyModContainer;
+import net.minecraftforge.fml.common.MetadataCollection;
+import net.minecraftforge.fml.common.ModMetadata;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,9 +16,14 @@ public final class Constants {
 
     public static final boolean DEBUG = Constants.class.getPackage().getImplementationTitle() == null;
 
+    public static final String AUTHOR = DEBUG ? "DEV" : Constants.class.getPackage().getImplementationVendor();
     public static final String VERSION = DEBUG ? "DEV" : Constants.class.getPackage().getImplementationVersion();
     public static final String MOD_NAME = DEBUG ? "bookyClient" : Constants.class.getPackage().getImplementationTitle();
     public static final String MOD_ID = MOD_NAME.toLowerCase();
+
+    public static final MetadataCollection METADATA_COLLECTION = MetadataCollection.from(Constants.class.getResourceAsStream("mcmod.info"), Constants.MOD_ID);
+    public static final ModMetadata METADATA = METADATA_COLLECTION.getMetadataForId(MOD_ID, Utilities.createMap(new Pair<>("name", MOD_NAME), new Pair<>("version", VERSION)));
+    public static final DummyModContainer MOD_CONTAINER = new DummyModContainer(Utilities.fillMetadata(Constants.METADATA));
 
     public static final File MINECRAFT_DIR = (Launch.minecraftHome == null ? new File(".") : Launch.minecraftHome);
     public static final File CLIENT_DIR = new File(MINECRAFT_DIR, MOD_NAME);
