@@ -16,13 +16,7 @@ public class MixinGuiMultiplayer extends GuiScreen implements GuiYesNoCallback {
 
     @Inject(method = "drawScreen", at = @At("RETURN"))
     public void onDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
-        switch (mc.getSession().getToken()) {
-            case "0":
-            case "FML":
-                drawCenteredString(Minecraft.getMinecraft().fontRendererObj, I18n.format("accounts.offline"), width / 2, 10, 16737380);
-                break;
-            default:
-                break;
-        }
+        if (mc.getSession().getToken().length() > 8) return;
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, I18n.format("accounts.offline"), width / 2, 10, 16737380);
     }
 }
