@@ -14,4 +14,7 @@ public interface MinecraftAccessor {
 
     @Accessor("defaultResourcePacks")
     List<IResourcePack> getDefaultResourcePacks();
+
+    @Accessor("session")
+    void setSession(Session session);
 }

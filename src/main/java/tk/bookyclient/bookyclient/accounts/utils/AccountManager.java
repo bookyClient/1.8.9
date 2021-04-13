@@ -83,18 +83,7 @@ public class AccountManager {
         }
     }
 
-    private boolean isOffline() {
-        String token = minecraft.getSession().getToken();
-        return token.equals("0") || token.equals("FML") || token.equals("dev");
-    }
-
-    private void setSession(Session session) throws ReflectiveOperationException {
-        for (Field field : minecraft.getClass().getDeclaredFields()) {
-            if (!field.getType().isInstance(session)) continue;
-
-            field.setAccessible(true);
-            field.set(minecraft, session);
-            break;
-        }
+    private void setSession(Session session) {
+        ((MinecraftAccessor) minecraft).setSession(session);
     }
 }
