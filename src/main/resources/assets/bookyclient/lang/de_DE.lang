@@ -64,3 +64,5 @@ client.colors.red=Rot:
 client.colors.green=Grün:
 client.colors.blue=Blau:
 client.colors.opacity=Sichtbarkeit:
+
+client.async_screenshots.started=Der Screenshot wird aufgenommen...

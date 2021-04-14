@@ -65,3 +65,5 @@ client.colors.red=Red:
 client.colors.green=Green:
 client.colors.blue=Blue:
 client.colors.opacity=Opacity:
+
+client.async_screenshots.started=Taking screenshot...

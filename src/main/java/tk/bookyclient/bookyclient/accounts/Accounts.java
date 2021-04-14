@@ -15,8 +15,8 @@ import java.util.Base64;
 
 public final class Accounts {
 
-    private static final MessageDigest HASHER = Utilities.getSHA512Hasher();
-    private static final KeyGenerator GENERATOR = Utilities.getAESGenerator();
+    private static final MessageDigest HASHER = Constants.UTILITIES.getSHA512Hasher();
+    private static final KeyGenerator GENERATOR = Constants.UTILITIES.getAESGenerator();
 
     public static String encode(String text) {
         try {
