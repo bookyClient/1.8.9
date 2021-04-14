@@ -14,16 +14,6 @@ import java.util.Map;
 
 public class Utilities {
 
-    public static boolean ping(String url) {
-        try {
-            URLConnection connection = new URL(url).openConnection();
-            connection.connect();
-            return true;
-        } catch (IOException exception) {
-            return false;
-        }
-    }
-
     @SafeVarargs
     public static <K, V> Map<K, V> createMap(Pair<K, V>... pairs) {
         Map<K, V> map = new HashMap<>();
