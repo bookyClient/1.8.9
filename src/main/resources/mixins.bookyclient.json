@@ -8,6 +8,7 @@
     "client.MinecraftAccessor",
     "client.MixinEntity",
     "client.MixinEntityLivingBase",
+    "client.MixinEntityPlayerSP",
     "client.MixinEntityRenderer",
     "client.MixinMinecraft",
     "forge.MixinFMLCommonHandler",
