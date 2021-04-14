@@ -101,7 +101,7 @@ public class ClientSettings implements Serializable {
     public boolean oldAnimationsBlockHitting = false;
 
     // Other things
-    private static ClientSettings instance;
+    private static ClientSettings instance = new ClientSettings();
     private static boolean saving = false;
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
     private static final File FILE = new File(Constants.CLIENT_DIR, "config.json");
@@ -110,40 +110,40 @@ public class ClientSettings implements Serializable {
     }
 
     public static ClientSettings getInstance() {
-        loadSettings();
         return instance;
     }
 
     public static void loadSettings() {
-        if (instance != null) return;
-
-        if (FILE.exists())
+        if (FILE.exists()) {
             try (FileReader reader = new FileReader(FILE)) {
                 instance = GSON.fromJson(reader, ClientSettings.class);
 
-                if (instance == null) {
-                    StringBuilder builder = new StringBuilder();
+                if (instance != null) {
+                    reader.close();
+                    return;
+                }
 
-                    int character;
-                    while ((character = reader.read()) != -1) builder.append((char) character);
+                StringBuilder builder = new StringBuilder();
 
-                    String replaced = builder.toString().replace("\n", "");
-                    if (replaced.equals("null") || replaced.isEmpty()) {
-                        new IllegalStateException("Error while reading config:\n" + builder).printStackTrace();
-                        Constants.LOGGER.warn("Attempting to recover from issue!");
+                int character;
+                while ((character = reader.read()) != -1) builder.append((char) character);
 
-                        instance = new ClientSettings();
-                        saveSettings(false);
+                String replaced = builder.toString().replace("\n", "");
+                if (replaced.equals("null") || replaced.isEmpty()) {
+                    new IllegalStateException("Error while reading config:\n" + builder).printStackTrace();
+                    Constants.LOGGER.warn("Attempting to recover from issue!");
 
-                        Constants.LOGGER.info("Recover successful, but all settings got cleared!");
-                    } else {
-                        throw new IllegalStateException("Error while reading config:\n" + builder);
-                    }
+                    instance = new ClientSettings();
+                    saveSettings(false);
+
+                    Constants.LOGGER.info("Recover successful, but all settings got cleared!");
+                } else {
+                    throw new IllegalStateException("Error while reading config:\n" + builder);
                 }
             } catch (IOException exception) {
                 throw new Error(exception);
             }
-        else {
+        } else {
             instance = new ClientSettings();
             saveSettings(false);
         }
@@ -158,13 +158,16 @@ public class ClientSettings implements Serializable {
                 if (instance == null) return;
 
                 GSON.toJson(instance, writer);
-                Constants.LOGGER.info("Saved " + Constants.MOD_NAME + " config " + (async ? "a" : "") + "synchronously!");
+                saving = false;
+
+                if (async) return;
+                Constants.LOGGER.info("Saved " + Constants.MOD_NAME + " config synchronously!");
             } catch (IOException exception) {
                 throw new Error(exception);
             }
         };
 
-        if (async) new Thread(runnable, "bookyClient Config Saver Thread");
+        if (async) new Thread(runnable, Constants.MOD_NAME + " Config Saver Thread").start();
         else runnable.run();
     }
 }

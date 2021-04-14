@@ -49,5 +49,4 @@ public abstract class Key extends ClientGUI implements Serializable {
         return openglName;
 
     }
-
 }

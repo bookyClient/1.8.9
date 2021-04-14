@@ -9,12 +9,11 @@ import org.lwjgl.input.Mouse;
 public class MovementKey extends Key {
 
     private final KeyBinding key;
-    private boolean wasPressed = false;
+    private boolean wasPressed;
     private long lastPress = 0;
 
     public MovementKey(KeyBinding key, int xOffset, int yOffset) {
         super(xOffset, yOffset);
-
         this.key = key;
     }
 
@@ -48,7 +47,7 @@ public class MovementKey extends Key {
 
         Gui.drawRect(x + xOffset, y + yOffset, x + xOffset + 22, y + yOffset + 22, -1912602624 + (color << 16) + (color << 8) + color);
 
-        final int keyWidth = 22;
+        int keyWidth = 22;
         int red = textColor >> 16 & 0xFF;
         int green = textColor >> 8 & 0xFF;
         int blue = textColor & 0xFF;
@@ -68,13 +67,15 @@ public class MovementKey extends Key {
             float scaleFactorRec = 1.0f / scaleFactor;
             xPos = (x + xOffset) * scaleFactorRec + 1.0f;
             yPos *= scaleFactorRec;
-        } else if (name.length() > 1)
+        } else if (name.length() > 1) {
             xPos -= stringWidth >> 2;
+        }
 
-        if (settings.keystrokesChroma)
+        if (settings.keystrokesChroma) {
             drawChromaString(name, (int) xPos, (int) yPos, 1.0);
-        else
+        } else {
             drawString(fontRendererObj, name, (int) xPos, (int) yPos, pressed ? pressedColor : colorN);
+        }
 
         GlStateManager.popMatrix();
     }

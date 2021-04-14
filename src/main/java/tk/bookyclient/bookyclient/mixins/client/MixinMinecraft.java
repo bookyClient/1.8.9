@@ -8,7 +8,10 @@ import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tk.bookyclient.bookyclient.ClientMod;
 import tk.bookyclient.bookyclient.features.WindowedFullscreen;
@@ -18,15 +21,11 @@ import tk.bookyclient.bookyclient.utils.Constants;
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
 
-    @Shadow
-    private boolean fullscreen;
+    @Shadow private boolean fullscreen;
 
-    @Shadow
-    @Final
-    public Profiler mcProfiler;
+    @Shadow @Final public Profiler mcProfiler;
 
-    @Shadow
-    public abstract String getVersion();
+    @Shadow public abstract String getVersion();
 
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createDisplay()V", shift = At.Shift.AFTER, by = 1))
     private void onDisplaySetTitle(CallbackInfo callbackInfo) {
@@ -56,7 +55,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "startGame", at = @At("HEAD"))
     public void preStart(CallbackInfo callbackInfo) {
-        ClientMod.preStart(Minecraft.getMinecraft());
+        ClientMod.preStart((MinecraftAccessor) Minecraft.getMinecraft());
     }
 
     @Inject(method = "startGame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;textureMapBlocks:Lnet/minecraft/client/renderer/texture/TextureMap;", shift = At.Shift.BEFORE, ordinal = 0))

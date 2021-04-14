@@ -86,7 +86,7 @@ public class CustomKey extends Key implements Serializable {
         int colorN = -16777216 + ((int) (red * textBrightness) << 16) + ((int) (green * textBrightness) << 8) + (int) (blue * textBrightness);
         float yPos = y + yOffset + 8;
 
-        if (chroma)
+        if (chroma) {
             if (type == 0) {
                 int xIn = x + (xOffset + 76) / 4;
                 int y2 = y + yOffset + 9;
@@ -97,14 +97,16 @@ public class CustomKey extends Key implements Serializable {
 
                 drawGradientRect(0, 0, 2, 35, Color.HSBtoRGB((System.currentTimeMillis() - xIn * 10 - y2 * 10) % 2000L / 2000.0f, 0.8f, 0.8f), Color.HSBtoRGB((System.currentTimeMillis() - (xIn + 35) * 10 - y2 * 10) % 2000L / 2000.0f, 0.8f, 0.8f));
                 GlStateManager.popMatrix();
-            } else if (type == 1)
+            } else if (type == 1) {
                 drawChromaString(name, x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(name) / 2, y + yOffset + 5, 1.0);
-            else
+            } else {
                 drawChromaString(name, (left + right) / 2 - fontRendererObj.getStringWidth(name) / 2, (int) yPos, 1.0);
-        else if (type == 0 || type == 1)
+            }
+        } else if (type == 0 || type == 1) {
             drawCenteredString(fontRendererObj, name, x + (xOffset + 70) / 2, y + yOffset + 5, pressed ? pressedColor : colorN);
-        else
+        } else {
             drawString(fontRendererObj, name, (left + right) / 2 - fontRendererObj.getStringWidth(name) / 2, (int) yPos, pressed ? pressedColor : colorN);
+        }
     }
 
     public int getType() {

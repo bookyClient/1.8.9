@@ -2,9 +2,12 @@ package tk.bookyclient.bookyclient.utils;
 
 import net.minecraftforge.fml.common.ModMetadata;
 
+import javax.crypto.KeyGenerator;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,5 +46,21 @@ public class Utilities {
         metadata.url = "https://" + Constants.MOD_ID + ".tk/";
 
         return metadata;
+    }
+
+    public static MessageDigest getSHA512Hasher() {
+        try {
+            return MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException exception) {
+            throw new Error(exception);
+        }
+    }
+
+    public static KeyGenerator getAESGenerator() {
+        try {
+            return KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException exception) {
+            throw new Error(exception);
+        }
     }
 }

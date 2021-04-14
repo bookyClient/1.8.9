@@ -31,7 +31,7 @@ public class MixinGuiOptions extends GuiScreen implements GuiYesNoCallback {
 
     @Inject(method = "actionPerformed", at = @At("HEAD"))
     public void onActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
-        if (button.id == Constants.SETTINGS_BUTTON_ID)
-            mc.displayGuiScreen(new KeystrokesMainSettingsGUI(this));
+        if (button.id != Constants.SETTINGS_BUTTON_ID) return;
+        mc.displayGuiScreen(new KeystrokesMainSettingsGUI(this));
     }
 }

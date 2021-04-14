@@ -22,16 +22,16 @@ public class PingKey extends Key {
         drawRect(x + xOffset, y + yOffset, x + xOffset + 70, y + yOffset + 16, -1912602624);
 
         NetHandlerPlayClient netHandler = mc.getNetHandler();
-        String ping = null;
+        String ping = "-";
+
         if (netHandler != null) {
             NetworkPlayerInfo playerInfo = netHandler.getPlayerInfo(mc.thePlayer.getUniqueID());
-            if (playerInfo != null) ping = Integer.toString(playerInfo.getResponseTime());
+            if (playerInfo != null) ping = playerInfo.getResponseTime() + "ms";
         }
 
-        String text = (ping == null) ? "-" : (ping + "ms");
         if (settings.keystrokesChroma)
-            drawChromaString(text, x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(text) / 2, y + (yOffset + 4), 1.0);
+            drawChromaString(ping, x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(ping) / 2, y + (yOffset + 4), 1.0);
         else
-            drawCenteredString(fontRendererObj, text, x + (xOffset + 70) / 2, y + (yOffset + 4), textColor);
+            drawCenteredString(fontRendererObj, ping, x + (xOffset + 70) / 2, y + (yOffset + 4), textColor);
     }
 }

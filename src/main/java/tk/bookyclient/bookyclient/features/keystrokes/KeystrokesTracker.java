@@ -15,7 +15,12 @@ public class KeystrokesTracker {
 
     private static final KeystrokesRenderer renderer = KeystrokesUtils.renderer;
     private static final List<Long> leftClicks = new ArrayList<>(), rightClicks = new ArrayList<>();
-    private static boolean leftWasDown = false, rightWasDown = false;
+    private static boolean leftWasDown, rightWasDown;
+
+    private static String display = I18n.format("keystrokes.reach.none");
+    private static Long lastAttack = 0L;
+
+    private static final DecimalFormat formatter = new DecimalFormat("0.0");
 
     public static int getLeftCPS() {
         long time = System.currentTimeMillis();
@@ -40,24 +45,18 @@ public class KeystrokesTracker {
         rightWasDown = downNow;
     }
 
-    private static String display = I18n.format("keystrokes.reach.none");
-    private static Long lastAttack = 0L;
-
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final DecimalFormat formatter = new DecimalFormat("0.0");
-
     public static String getReach() {
         return display;
     }
 
     public static void tickReach() {
-        if (System.nanoTime() - lastAttack >= 2.0E9)
-            display = I18n.format("keystrokes.reach.none");
+        if (System.nanoTime() - lastAttack < 2.0E9) return;
+        display = I18n.format("keystrokes.reach.none");
     }
 
     public static void updateReach() {
-        Vec3 playerPosition = mc.getRenderViewEntity().getPositionEyes(1.0F);
-        double reach = mc.objectMouseOver.hitVec.distanceTo(playerPosition);
+        Vec3 playerPosition = Minecraft.getMinecraft().getRenderViewEntity().getPositionEyes(1.0F);
+        double reach = Minecraft.getMinecraft().objectMouseOver.hitVec.distanceTo(playerPosition);
 
         display = I18n.format("keystrokes.reach.format", formatter.format(reach));
         lastAttack = System.nanoTime();

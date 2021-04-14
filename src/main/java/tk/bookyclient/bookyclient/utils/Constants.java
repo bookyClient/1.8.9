@@ -1,7 +1,9 @@
 package tk.bookyclient.bookyclient.utils;
 // Created by booky10 in bookyClient (19:12 29.12.20)
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.ModMetadata;
@@ -30,18 +32,21 @@ public final class Constants {
     public static final File CACHE_DIR = new File(CLIENT_DIR, "cache");
     public static final File ACCOUNT_SWITCHER_DIR = new File(CLIENT_DIR, "accounts");
 
-    public static final Integer ACCOUNTS_BUTTON_ID = new Random().nextInt(Integer.MAX_VALUE);
-    public static final Integer SETTINGS_BUTTON_ID = new Random().nextInt(Integer.MAX_VALUE);
+    public static final int ACCOUNTS_BUTTON_ID = new Random().nextInt(Integer.MAX_VALUE);
+    public static final int SETTINGS_BUTTON_ID = new Random().nextInt(Integer.MAX_VALUE);
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final String USER_AGENT = String.format("Minecraft/Forge%s/%s%s/%s", ForgeVersion.getVersion(), MOD_NAME, VERSION, AUTHOR);
 
     public static void createDirs() {
         for (Field field : Constants.class.getDeclaredFields()) {
             try {
                 field.setAccessible(true);
-                Object object = field.get(null);
 
-                if (object instanceof File) ((File) object).mkdirs();
+                Object object = field.get(null);
+                if (!(object instanceof File)) continue;
+
+                ((File) object).mkdirs();
             } catch (Throwable ignored) {
             }
         }

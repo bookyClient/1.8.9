@@ -21,9 +21,10 @@ public class FPSKey extends Key {
         Gui.drawRect(x + xOffset, y + yOffset, x + xOffset + 70, y + yOffset + 16, -1912602624);
 
         String name = Minecraft.getDebugFPS() + " FPS";
-        if (settings.keystrokesChroma)
+        if (settings.keystrokesChroma) {
             drawChromaString(name, x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(name) / 2, y + (yOffset + 4), 1.0);
-        else
+        } else {
             drawCenteredString(fontRendererObj, name, x + (xOffset + 70) / 2, y + (yOffset + 4), textColor);
+        }
     }
 }

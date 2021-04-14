@@ -34,10 +34,11 @@ public class KeystrokesUtils {
         int width = getWidth(), x = settings.keystrokesX;
         double scale = settings.keystrokesScale;
 
-        if (x < 0)
+        if (x < 0) {
             x = 0;
-        else if (x * scale > resolution.getScaledWidth() - width * scale)
+        } else if (x * scale > resolution.getScaledWidth() - width * scale) {
             x = (int) ((resolution.getScaledWidth() - width * scale) / scale);
+        }
 
         return x;
     }
@@ -47,10 +48,11 @@ public class KeystrokesUtils {
         int height = getHeight(), y = settings.keystrokesY;
         double scale = settings.keystrokesScale;
 
-        if (y < 0)
+        if (y < 0) {
             y = 0;
-        else if (y * scale > resolution.getScaledHeight() - height * scale)
+        } else if (y * scale > resolution.getScaledHeight() - height * scale) {
             y = (int) ((resolution.getScaledHeight() - height * scale) / scale);
+        }
 
         return y;
     }

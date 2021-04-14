@@ -16,8 +16,7 @@ public abstract class MixinEntityRenderer implements IResourceManagerReloadListe
 
     private static final ClientSettings settings = ClientSettings.getInstance();
 
-    @Shadow
-    private Minecraft mc;
+    @Shadow private Minecraft mc;
 
     @Inject(method = "getFOVModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getRenderViewEntity()Lnet/minecraft/entity/Entity;", shift = At.Shift.BEFORE), cancellable = true)
     public void afterUseCheck(float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Float> callbackInfoReturnable) {

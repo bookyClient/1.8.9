@@ -12,7 +12,7 @@ import tk.bookyclient.bookyclient.utils.Constants;
 @Mixin(FMLCommonHandler.class)
 public class MixinFMLCommonHandler {
 
-    @Redirect(remap = false, method = "computeBranding", at = @At(value = "INVOKE_ASSIGN", target = "Lcom/google/common/collect/ImmutableList$Builder;build()Lcom/google/common/collect/ImmutableList;"))
+    @Redirect(remap = false, method = "computeBranding", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableList$Builder;build()Lcom/google/common/collect/ImmutableList;"))
     public ImmutableList<String> onModsAdd(ImmutableList.Builder<String> builder) {
         builder.add(String.format("%s %s (MC %s)", Constants.MOD_NAME, Constants.VERSION, Minecraft.getMinecraft().getVersion()));
         return builder.build();

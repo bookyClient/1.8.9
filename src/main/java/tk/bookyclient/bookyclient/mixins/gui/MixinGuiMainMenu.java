@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tk.bookyclient.bookyclient.accounts.gui.AccountSelectorGUI;
+import tk.bookyclient.bookyclient.accounts.gui.main.AccountSelectorGUI;
 import tk.bookyclient.bookyclient.utils.Constants;
 
 import java.util.List;
@@ -23,24 +23,17 @@ import java.util.List;
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 
-    private final ResourceLocation backgroundTexture = new ResourceLocation("bookyclient", "textures/gui/title/background.png");
+    private final ResourceLocation backgroundTexture = new ResourceLocation(Constants.MOD_ID, "textures/gui/title/background.png");
 
-    @Shadow
-    @Final
-    private Object threadLock;
+    @Shadow @Final private Object threadLock;
 
-    @Shadow
-    private int field_92023_s, field_92024_r, field_92022_t, field_92021_u, field_92020_v, field_92019_w;
+    @Shadow private int field_92023_s, field_92024_r, field_92022_t, field_92021_u, field_92020_v, field_92019_w;
 
-    @Shadow
-    private String openGLWarning1, openGLWarning2;
+    @Shadow private String openGLWarning1, openGLWarning2;
 
-    @Shadow
-    @Final
-    private static ResourceLocation minecraftTitleTextures;
+    @Shadow @Final private static ResourceLocation minecraftTitleTextures;
 
-    @Shadow
-    private float updateCounter;
+    @Shadow private float updateCounter;
 
     /**
      * @author booky10
@@ -54,12 +47,12 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
         buttonList.add(new GuiButton(1, width / 2 - 100, height, I18n.format("menu.singleplayer")));
         buttonList.add(new GuiButton(2, width / 2 - 100, height + 24, I18n.format("menu.multiplayer")));
         buttonList.add(new GuiButton(0, width / 2 - 100, height + 48, I18n.format("menu.options")));
-        buttonList.add(new GuiButton(6, width / 2 - 100, height + 72, "Mods"));
+        buttonList.add(new GuiButton(6, width / 2 - 100, height + 72, I18n.format("fml.menu.mods")));
         buttonList.add(new GuiButton(4, width / 2 - 100, height + 96, I18n.format("menu.quit")));
 
-        buttonList.add(new GuiButton(Constants.ACCOUNTS_BUTTON_ID, width / 2 - 100, height - 24, "Accounts"));
+        buttonList.add(new GuiButton(Constants.ACCOUNTS_BUTTON_ID, width / 2 - 100, height - 24, I18n.format("accounts.accounts")));
 
-        //noinspection SynchronizeOnNonFinalField
+        // noinspection SynchronizeOnNonFinalField
         synchronized (threadLock) {
             field_92023_s = fontRendererObj.getStringWidth(openGLWarning1);
             field_92024_r = fontRendererObj.getStringWidth(openGLWarning2);
@@ -81,8 +74,8 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
 
     @Inject(method = "actionPerformed", at = @At("RETURN"))
     public void onActionPerformed(GuiButton button, CallbackInfo info) {
-        if (button.id == Constants.ACCOUNTS_BUTTON_ID)
-            mc.displayGuiScreen(new AccountSelectorGUI());
+        if (button.id != Constants.ACCOUNTS_BUTTON_ID) return;
+        mc.displayGuiScreen(new AccountSelectorGUI());
     }
 
     private void renderBackground() {
@@ -126,8 +119,8 @@ public abstract class MixinGuiMainMenu extends GuiScreen implements GuiYesNoCall
         List<String> brandings = Lists.reverse(FMLCommonHandler.instance().getBrandings(true));
         for (int line = 0; line < brandings.size(); line++) {
             String branding = brandings.get(line);
-            if (!Strings.isNullOrEmpty(branding))
-                drawString(fontRendererObj, branding, 2, height - (10 + line * (fontRendererObj.FONT_HEIGHT + 1)), 16777215);
+            if (Strings.isNullOrEmpty(branding)) continue;
+            drawString(fontRendererObj, branding, 2, height - (10 + line * (fontRendererObj.FONT_HEIGHT + 1)), 16777215);
         }
 
         String copyright = "Copyright Mojang AB. Do not distribute!";

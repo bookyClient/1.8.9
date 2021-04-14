@@ -21,12 +21,12 @@ import java.nio.charset.StandardCharsets;
 @Mixin(NetHandlerPlayClient.class)
 public abstract class MixinNetHandlerPlayClient {
 
-    @Shadow
-    public abstract NetworkManager getNetworkManager();
+    @Shadow public abstract NetworkManager getNetworkManager();
 
     @Inject(method = "handleResourcePack", at = @At("HEAD"), cancellable = true)
     public void onHandleResourcePack(S48PacketResourcePackSend packetIn, CallbackInfo callbackInfo) {
-        if (!validateResourcePackUrl(packetIn.getURL(), packetIn.getHash())) callbackInfo.cancel();
+        if (validateResourcePackUrl(packetIn.getURL(), packetIn.getHash())) return;
+        callbackInfo.cancel();
     }
 
     private boolean validateResourcePackUrl(String url, String hash) {
@@ -45,6 +45,7 @@ public abstract class MixinNetHandlerPlayClient {
                 Constants.LOGGER.warn("Malicious server tried to access " + url + "!");
                 throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");
             }
+
             return true;
         } catch (URISyntaxException exception) {
             return false;

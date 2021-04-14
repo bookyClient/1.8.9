@@ -23,10 +23,11 @@ public class ReachKey extends Key {
         drawRect(x + xOffset, y + yOffset, x + xOffset + 70, y + yOffset + 16, -1912602624);
 
         KeystrokesTracker.tickReach();
-        String text = KeystrokesTracker.getReach();
-        if (settings.keystrokesChroma)
-            drawChromaString(text, x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(text) / 2, y + (yOffset + 4), 1.0);
-        else
-            drawCenteredString(fontRendererObj, text, x + (xOffset + 70) / 2, y + (yOffset + 4), textColor);
+
+        if (settings.keystrokesChroma) {
+            drawChromaString(KeystrokesTracker.getReach(), x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(KeystrokesTracker.getReach()) / 2, y + (yOffset + 4), 1.0);
+        } else {
+            drawCenteredString(fontRendererObj, KeystrokesTracker.getReach(), x + (xOffset + 70) / 2, y + (yOffset + 4), textColor);
+        }
     }
 }

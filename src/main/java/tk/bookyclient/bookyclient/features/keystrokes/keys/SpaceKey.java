@@ -39,6 +39,7 @@ public class SpaceKey extends Key {
         boolean pressed = isButtonDown(key.getKeyCode());
         boolean chroma = settings.keystrokesChroma;
         double fadeTime = 0.25;
+
         String name = this.name.equalsIgnoreCase("space") ? (chroma ? "------" : (EnumChatFormatting.STRIKETHROUGH.toString() + "-----")) : "Sneak";
         if (pressed != wasPressed) {
             wasPressed = pressed;
@@ -76,9 +77,11 @@ public class SpaceKey extends Key {
 
                 drawGradientRect(0, 0, 2, 35, Color.HSBtoRGB((System.currentTimeMillis() - xIn * 10 - y2 * 10) % 2000L / 2000.0f, 0.8f, 0.8f), Color.HSBtoRGB((System.currentTimeMillis() - (xIn + 35) * 10 - y2 * 10) % 2000L / 2000.0f, 0.8f, 0.8f));
                 GlStateManager.popMatrix();
-            } else
+            } else {
                 drawChromaString(name, x + (xOffset + 70) / 2 - fontRendererObj.getStringWidth(name) / 2, y + yOffset + 5, 1.0);
-        } else
+            }
+        } else {
             drawCenteredString(fontRendererObj, name, x + (xOffset + 70) / 2, y + yOffset + 5, pressed ? pressedColor : colorN);
+        }
     }
 }

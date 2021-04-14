@@ -7,14 +7,14 @@ import tk.bookyclient.bookyclient.features.keystrokes.KeystrokesTracker;
 
 public class MouseButton extends Key {
 
-    private static final String[] BUTTONS;
+    private static final String[] BUTTONS = new String[]{"LMB", "RMB"};
+
     private final int button;
-    private boolean wasPressed = false;
+    private boolean wasPressed;
     private long lastPress = 0;
 
     public MouseButton(int button, int xOffset, int yOffset) {
         super(xOffset, yOffset);
-
         this.button = button;
     }
 
@@ -31,6 +31,7 @@ public class MouseButton extends Key {
 
         String name = MouseButton.BUTTONS[button];
         double fadeTime = 0.25;
+
         if (pressed != wasPressed) {
             wasPressed = pressed;
             lastPress = System.currentTimeMillis();
@@ -56,27 +57,26 @@ public class MouseButton extends Key {
         if (settings.keystrokesCPS) {
             KeystrokesTracker.tickCPS();
 
-            int round = Math.round(y / 0.5f + yOffset / 0.5f + 28.0f);
-            int round1 = Math.round(x / 0.5f + xOffset / 0.5f + 20.0f);
+            int roundedX = Math.round(x / 0.5f + xOffset / 0.5f + 20.0f);
+            int roundedY = Math.round(y / 0.5f + yOffset / 0.5f + 28.0f);
+
             if (settings.keystrokesChroma) {
                 drawChromaString(name, x + xOffset + 8, y + yOffset + 4, 1.0);
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(0.5f, 0.5f, 0.0f);
-                drawChromaString((name.equals(MouseButton.BUTTONS[0]) ? KeystrokesTracker.getLeftCPS() : KeystrokesTracker.getRightCPS()) + " CPS", round1, round, 0.5);
+                drawChromaString((name.equals(MouseButton.BUTTONS[0]) ? KeystrokesTracker.getLeftCPS() : KeystrokesTracker.getRightCPS()) + " CPS", roundedX, roundedY, 0.5);
             } else {
                 drawString(fontRendererObj, name, x + xOffset + 8, y + yOffset + 4, pressed ? pressedColor : colorN);
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(0.5f, 0.5f, 0.0f);
-                drawString(fontRendererObj, (name.equals(MouseButton.BUTTONS[0]) ? KeystrokesTracker.getLeftCPS() : KeystrokesTracker.getRightCPS()) + " CPS", round1, round, pressed ? pressedColor : colorN);
+                drawString(fontRendererObj, (name.equals(MouseButton.BUTTONS[0]) ? KeystrokesTracker.getLeftCPS() : KeystrokesTracker.getRightCPS()) + " CPS", roundedX, roundedY, pressed ? pressedColor : colorN);
             }
-            GlStateManager.popMatrix();
-        } else if (settings.keystrokesChroma)
-            drawChromaString(name, x + xOffset + 8, y + yOffset + 8, 1.0);
-        else
-            drawString(fontRendererObj, name, x + xOffset + 8, y + yOffset + 8, pressed ? pressedColor : colorN);
-    }
 
-    static {
-        BUTTONS = new String[]{"LMB", "RMB"};
+            GlStateManager.popMatrix();
+        } else if (settings.keystrokesChroma) {
+            drawChromaString(name, x + xOffset + 8, y + yOffset + 8, 1.0);
+        } else {
+            drawString(fontRendererObj, name, x + xOffset + 8, y + yOffset + 8, pressed ? pressedColor : colorN);
+        }
     }
 }

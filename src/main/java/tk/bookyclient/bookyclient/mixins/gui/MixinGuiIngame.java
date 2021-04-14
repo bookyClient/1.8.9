@@ -18,11 +18,7 @@ import tk.bookyclient.bookyclient.settings.ClientSettings;
 @Mixin(GuiIngame.class)
 public class MixinGuiIngame extends Gui {
 
-    private static final ClientSettings settings = ClientSettings.getInstance();
-
-    @Shadow
-    @Final
-    protected Minecraft mc;
+    @Shadow @Final protected Minecraft mc;
 
     @Inject(method = "showCrosshair", at = @At("HEAD"), cancellable = true)
     public void onShowCrosshair(CallbackInfoReturnable<Boolean> returnable) {
@@ -32,13 +28,13 @@ public class MixinGuiIngame extends Gui {
 
     @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawRect(IIIII)V"), expect = 3)
     public void onDrawRect(int left, int top, int right, int bottom, int color) {
-        drawRect(left, top, right, bottom, settings.clearScoreboardBackground ? 0 : color);
+        drawRect(left, top, right, bottom, ClientSettings.getInstance().clearScoreboardBackground ? 0 : color);
     }
 
     @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"), expect = 3)
     public int onDrawString(FontRenderer fontRenderer, String text, int x, int y, int color) {
         if (!text.startsWith(EnumChatFormatting.RED.toString())) return fontRenderer.drawString(text, x, y, color);
-        if (settings.hideScoreboardRedScores) return 0;
+        if (ClientSettings.getInstance().hideScoreboardRedScores) return 0;
 
         return fontRenderer.drawString(text, x, y, color);
     }

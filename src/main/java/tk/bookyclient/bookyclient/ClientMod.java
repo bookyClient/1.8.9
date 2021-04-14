@@ -13,10 +13,8 @@ import java.util.TimerTask;
 
 public class ClientMod {
 
-    public static void preStart(Minecraft minecraft) {
-        Constants.LOGGER.info("Pre-Loading " + Constants.MOD_NAME + "...");
-
-        ((MinecraftAccessor) minecraft).getDefaultResourcePacks().add(ClientResourcePack.getInstance());
+    public static void preStart(MinecraftAccessor minecraft) {
+        minecraft.getDefaultResourcePacks().add(ClientResourcePack.getInstance());
         ClientSettings.loadSettings();
     }
 
@@ -25,12 +23,8 @@ public class ClientMod {
     }
 
     public static void postStart() {
-        Constants.LOGGER.info("Post-Loading " + Constants.MOD_NAME + "...");
-
         SkinUtils.cacheSkins();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientSettings.saveSettings(false), Constants.MOD_NAME + " Config Saver Thread"));
-
-        Constants.LOGGER.info("Starting auto config saver timer");
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
