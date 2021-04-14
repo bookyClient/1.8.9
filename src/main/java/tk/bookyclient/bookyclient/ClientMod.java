@@ -1,10 +1,8 @@
 package tk.bookyclient.bookyclient;
 // Created by booky10 in bookyClient (19:14 29.12.20)
 
-import net.minecraft.client.Minecraft;
-import tk.bookyclient.bookyclient.accounts.encryption.Standards;
+import tk.bookyclient.bookyclient.accounts.Accounts;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
-import tk.bookyclient.bookyclient.accounts.utils.AccountConfig;
 import tk.bookyclient.bookyclient.mixins.client.MinecraftAccessor;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.ClientResourcePack;
@@ -23,10 +21,7 @@ public class ClientMod {
     }
 
     public static void start() {
-        Constants.LOGGER.info("Loading " + Constants.MOD_NAME + "...");
-
-        AccountConfig.readFromFile();
-        Standards.importAccounts();
+        Accounts.load();
     }
 
     public static void postStart() {

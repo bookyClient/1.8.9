@@ -21,6 +21,7 @@ accounts.reloadskins=Reload Skins
 accounts.accounts=Accounts
 accounts.offlinelogin=Offline Login
 accounts.logging=Logging in...
+accounts.failed=Invalid username or password.
 
 # Keystrokes
 keystrokes.gui.main.title=Keystrokes

@@ -1,27 +1,26 @@
-package tk.bookyclient.bookyclient.accounts.gui;
+package tk.bookyclient.bookyclient.accounts.gui.main;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
-import tk.bookyclient.bookyclient.accounts.encryption.EncryptionTools;
-import tk.bookyclient.bookyclient.accounts.model.AccountData;
-import tk.bookyclient.bookyclient.accounts.utils.AccountDatabase;
+import tk.bookyclient.bookyclient.accounts.Account;
+import tk.bookyclient.bookyclient.accounts.AccountDatabase;
+import tk.bookyclient.bookyclient.accounts.Accounts;
+import tk.bookyclient.bookyclient.accounts.gui.components.PasswordBox;
 
 import java.io.IOException;
 
 public abstract class AbstractAccountGUI extends GuiScreen {
 
-    private final String actionString;
-
+    private final String title;
+    protected boolean hasChanged;
     private GuiTextField username, password;
-    private GuiButton complete;
+    private GuiButton done;
 
-    protected boolean hasUserChanged = false;
-
-    public AbstractAccountGUI(String actionString) {
-        this.actionString = actionString;
+    public AbstractAccountGUI(String title) {
+        this.title = title;
     }
 
     @Override
@@ -29,24 +28,24 @@ public abstract class AbstractAccountGUI extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
 
         buttonList.clear();
-        buttonList.add(complete = new GuiButton(2, width / 2 - 152, height - 28, 150, 20, I18n.format(actionString)));
+        buttonList.add(done = new GuiButton(2, width / 2 - 152, height - 28, 150, 20, title));
         buttonList.add(new GuiButton(3, width / 2 + 2, height - 28, 150, 20, I18n.format("gui.cancel")));
 
         username = new GuiTextField(0, fontRendererObj, width / 2 - 100, 60, 200, 20);
         username.setFocused(true);
         username.setMaxStringLength(64);
 
-        password = new PasswordField(1, fontRendererObj, width / 2 - 100, 90, 200, 20);
+        password = new PasswordBox(1, width / 2 - 100, 90, 200, 20);
         password.setMaxStringLength(64);
 
-        complete.enabled = false;
+        done.enabled = false;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        drawCenteredString(fontRendererObj, I18n.format(actionString), width / 2, 7, -1);
+        drawCenteredString(fontRendererObj, title, width / 2, 7, -1);
         drawCenteredString(fontRendererObj, I18n.format("accounts.username"), width / 2 - 130, 66, -1);
         drawCenteredString(fontRendererObj, I18n.format("accounts.password"), width / 2 - 130, 96, -1);
 
@@ -57,25 +56,29 @@ public abstract class AbstractAccountGUI extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char character, int keyIndex) {
-        if (keyIndex == Keyboard.KEY_ESCAPE) {
-            escape();
-        } else if (keyIndex == Keyboard.KEY_RETURN) {
-            if (username.isFocused()) {
+    protected void keyTyped(char character, int key) {
+        switch (key) {
+            case Keyboard.KEY_ESCAPE:
+                mc.displayGuiScreen(new AccountSelectorGUI());
+                break;
+            case Keyboard.KEY_RETURN:
+                if (!done.enabled) break;
+                complete();
+                mc.displayGuiScreen(new AccountSelectorGUI());
+                break;
+            case Keyboard.KEY_TAB:
+                if (!username.isFocused()) break;
                 username.setFocused(false);
                 password.setFocused(true);
-            } else if (password.isFocused() && complete.enabled) {
-                complete();
-                escape();
-            }
-        } else if (keyIndex == Keyboard.KEY_TAB) {
-            username.setFocused(!username.isFocused());
-            password.setFocused(!password.isFocused());
-        } else {
-            username.textboxKeyTyped(character, keyIndex);
-            password.textboxKeyTyped(character, keyIndex);
-
-            if (username.isFocused()) hasUserChanged = true;
+                break;
+            default:
+                if (username.isFocused()) {
+                    username.textboxKeyTyped(character, key);
+                    hasChanged = true;
+                } else if (password.isFocused()) {
+                    password.textboxKeyTyped(character, key);
+                }
+                break;
         }
     }
 
@@ -83,17 +86,15 @@ public abstract class AbstractAccountGUI extends GuiScreen {
     public void updateScreen() {
         username.updateCursorCounter();
         password.updateCursorCounter();
-        complete.enabled = canComplete();
+        done.enabled = canComplete();
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.enabled) if (button.id == 2) {
-            complete();
-            escape();
-        } else if (button.id == 3) {
-            escape();
-        }
+        if (!button.enabled) return;
+        if (button.id == 2) complete();
+        if (button.id != 2 && button.id != 3) return;
+        mc.displayGuiScreen(new AccountSelectorGUI());
     }
 
     @Override
@@ -107,37 +108,35 @@ public abstract class AbstractAccountGUI extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-    }
-
-    private void escape() {
-        mc.displayGuiScreen(new AccountSelectorGUI());
+        Accounts.save();
     }
 
     public String getUsername() {
         return username.getText();
     }
 
-    public String getPassword() {
-        return password.getText();
-    }
-
     public void setUsername(String username) {
         this.username.setText(username);
+    }
+
+    public String getPassword() {
+        return password.getText();
     }
 
     public void setPassword(String password) {
         this.password.setText(password);
     }
 
-    protected boolean accountNotInList() {
-        for (AccountData data : AccountDatabase.getInstance().getAccounts())
-            if (EncryptionTools.decode(data.user).equals(getUsername()))
-                return false;
-        return true;
+    private boolean wouldDuplicate() {
+        for (Account data : AccountDatabase.getAccounts()) {
+            if (!Accounts.decode(data.getUsername()).equals(getUsername())) continue;
+            return true;
+        }
+        return false;
     }
 
     public boolean canComplete() {
-        return getUsername().length() > 0 && accountNotInList();
+        return getUsername().length() > 0 && !wouldDuplicate();
     }
 
     public abstract void complete();

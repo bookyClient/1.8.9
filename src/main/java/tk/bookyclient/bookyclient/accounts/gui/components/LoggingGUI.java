@@ -1,10 +1,10 @@
-package tk.bookyclient.bookyclient.accounts.gui;
+package tk.bookyclient.bookyclient.accounts.gui.components;
 // Created by booky10 in bookyClient (19:43 12.04.21)
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
-public class LoggingInGUI extends GuiScreen {
+public class LoggingGUI extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
