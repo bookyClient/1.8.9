@@ -23,7 +23,8 @@
     "main.MinecraftAccessor",
     "main.MixinMinecraft",
     "main.MixinMinecraftCrash",
-    "network.MixinNetHandlerPlayClient"
+    "network.MixinNetHandlerPlayClient",
+    "render.MixinRender"
   ],
   "injectors": {
     "defaultRequire": 1
