@@ -107,9 +107,9 @@ public class Account implements Serializable {
             setName(session.getUsername());
 
             client.setSession(session);
-            return true;
-        } catch (Throwable throwable) {
             return false;
+        } catch (Throwable throwable) {
+            return true;
         }
     }
 }
