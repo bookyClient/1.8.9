@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins.client;
+package tk.bookyclient.bookyclient.mixins.gui;
 // Created by booky10 in bookyClient (18:21 15.04.21)
 
 import net.minecraft.client.Minecraft;

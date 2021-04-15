@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins.forge;
+package tk.bookyclient.bookyclient.mixins.forge.gui;
 // Created by booky10 in bookyClient (17:38 13.04.21)
 
 import net.minecraftforge.fml.client.GuiModList;

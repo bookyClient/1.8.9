@@ -6,7 +6,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
-import tk.bookyclient.bookyclient.mixins.client.MinecraftAccessor;
+import tk.bookyclient.bookyclient.mixins.main.MinecraftAccessor;
 
 import java.io.Serializable;
 import java.util.UUID;

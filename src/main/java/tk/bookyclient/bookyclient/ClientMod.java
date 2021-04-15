@@ -3,7 +3,7 @@ package tk.bookyclient.bookyclient;
 
 import tk.bookyclient.bookyclient.accounts.Accounts;
 import tk.bookyclient.bookyclient.accounts.skins.SkinUtils;
-import tk.bookyclient.bookyclient.mixins.client.MinecraftAccessor;
+import tk.bookyclient.bookyclient.mixins.main.MinecraftAccessor;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.ClientResourcePack;
 import tk.bookyclient.bookyclient.utils.Constants;

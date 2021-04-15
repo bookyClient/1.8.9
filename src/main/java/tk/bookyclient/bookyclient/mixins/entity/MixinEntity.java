@@ -1,4 +1,4 @@
-package tk.bookyclient.bookyclient.mixins.client;
+package tk.bookyclient.bookyclient.mixins.entity;
 // Created by booky10 in bookyClient (22:13 04.01.21)
 
 import net.minecraft.entity.Entity;
