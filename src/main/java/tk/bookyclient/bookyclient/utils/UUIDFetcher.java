@@ -2,7 +2,6 @@ package tk.bookyclient.bookyclient.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;

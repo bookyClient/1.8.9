@@ -40,7 +40,7 @@ public class SpaceKey extends Key {
         boolean chroma = settings.keystrokesChroma;
         double fadeTime = 0.25;
 
-        String name = this.name.equalsIgnoreCase("space") ? (chroma ? "------" : (EnumChatFormatting.STRIKETHROUGH.toString() + "-----")) : "Sneak";
+        String name = this.name.equalsIgnoreCase("space") ? (chroma ? "------" : (EnumChatFormatting.STRIKETHROUGH + "-----")) : "Sneak";
         if (pressed != wasPressed) {
             wasPressed = pressed;
             lastPress = System.currentTimeMillis();

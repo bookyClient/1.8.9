@@ -44,7 +44,7 @@ public class CustomKey extends Key implements Serializable {
         boolean chroma = settings.keystrokesChroma;
         double fadeTime = 0.25;
 
-        String name = (type == 0) ? (chroma ? "------" : (EnumChatFormatting.STRIKETHROUGH.toString() + "-----")) : getKeyOrMouseName(key);
+        String name = (type == 0) ? (chroma ? "------" : (EnumChatFormatting.STRIKETHROUGH + "-----")) : getKeyOrMouseName(key);
 
         if (pressed != wasPressed) {
             wasPressed = pressed;
