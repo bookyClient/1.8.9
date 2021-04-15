@@ -40,7 +40,7 @@ public final class Constants {
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final String USER_AGENT = String.format("Minecraft/Forge%s/%s%s/%s", ForgeVersion.getVersion(), MOD_NAME, VERSION, AUTHOR);
-    public static final DateFormat SCREENSHOT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
     public static void createDirs() {
         for (Field field : Constants.class.getDeclaredFields()) {

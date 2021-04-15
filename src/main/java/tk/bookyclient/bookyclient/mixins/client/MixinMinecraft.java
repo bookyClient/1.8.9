@@ -124,7 +124,7 @@ public abstract class MixinMinecraft {
             TextureUtil.processPixelValues(pixelValues, width, height);
             AtomicReference<BufferedImage> image = new AtomicReference<>();
 
-            String date = Constants.SCREENSHOT_DATE_FORMAT.format(new Date());
+            String date = Constants.DATE_FORMAT.format(new Date());
             int count = 1;
 
             File file;
