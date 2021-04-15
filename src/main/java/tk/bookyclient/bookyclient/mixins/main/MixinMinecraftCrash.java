@@ -86,7 +86,7 @@ public abstract class MixinMinecraftCrash {
      * @author booky10
      * @reason Deny these actually crashing crashes
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public void run() {
         running = true;
 
@@ -243,7 +243,7 @@ public abstract class MixinMinecraftCrash {
      * @author booky10
      * @reason My methods are better
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public void displayCrashReport(CrashReport report) {
         Constants.UTILITIES.saveReport(report);
     }
@@ -292,7 +292,7 @@ public abstract class MixinMinecraftCrash {
      * @author booky10
      * @reason My methods still better
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public void freeMemory() {
         resetGameState();
     }
