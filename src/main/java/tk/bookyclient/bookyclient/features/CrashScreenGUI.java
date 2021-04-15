@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.crash.CrashReport;
+import tk.bookyclient.bookyclient.settings.ClientSettings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,6 +24,10 @@ public class CrashScreenGUI extends GuiScreen {
 
         String[] trace = new String[0];
         try {
+            if (!ClientSettings.getInstance().crashScreen) {
+                throw new IOException("Crashing the game because the crash screen option is not enabled");
+            }
+
             StringWriter string = new StringWriter();
             PrintWriter printer = new PrintWriter(string);
 
@@ -32,6 +37,7 @@ public class CrashScreenGUI extends GuiScreen {
             printer.close();
             string.close();
         } catch (IOException exception) {
+            exception.printStackTrace();
             shutdown();
         }
 
