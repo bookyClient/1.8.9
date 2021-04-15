@@ -1,7 +1,6 @@
 package tk.bookyclient.bookyclient.accounts;
 
 import tk.bookyclient.bookyclient.utils.Constants;
-import tk.bookyclient.bookyclient.utils.Utilities;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
