@@ -10,6 +10,7 @@
     "client.MixinEntityLivingBase",
     "client.MixinEntityPlayerSP",
     "client.MixinEntityRenderer",
+    "client.MixinGuiPlayerTabOverlay",
     "client.MixinMinecraft",
     "client.MixinMinecraftCrash",
     "forge.MixinFMLCommonHandler",

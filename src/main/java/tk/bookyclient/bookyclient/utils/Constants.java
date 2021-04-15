@@ -9,10 +9,12 @@ import net.minecraftforge.fml.common.ModMetadata;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.Random;
 
 public final class Constants {
@@ -42,6 +44,7 @@ public final class Constants {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final String USER_AGENT = String.format("Minecraft/Forge%s/%s%s/%s", ForgeVersion.getVersion(), MOD_NAME, VERSION, AUTHOR);
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+    public static final Map<Integer, Integer> PING_COLORS = UTILITIES.createMap(new Pair<>(0, new Color(0, 255, 0).getRGB()), new Pair<>(1, new Color(255, 128, 0).getRGB()), new Pair<>(2, new Color(255, 0, 0).getRGB()), new Pair<>(3, new Color(128, 0, 0).getRGB()), new Pair<>(4, new Color(64, 0, 0).getRGB()), new Pair<>(5, new Color(0, 0, 255).getRGB()));
 
     public static void createDirs() {
         for (Field field : Constants.class.getDeclaredFields()) {
