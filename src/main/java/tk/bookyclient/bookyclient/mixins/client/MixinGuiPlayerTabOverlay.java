@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
@@ -39,5 +40,11 @@ public class MixinGuiPlayerTabOverlay extends Gui {
         zLevel -= 100;
 
         callbackInfo.cancel();
+    }
+
+    @Redirect(method = "renderPlayerlist", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;drawRect(IIIII)V"), expect = 4)
+    public void onRectangleDraw(int left, int top, int right, int bottom, int color) {
+        if (ClientSettings.getInstance().invisibleTablist) return;
+        drawRect(left, top, right, bottom, color);
     }
 }
