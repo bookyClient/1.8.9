@@ -31,6 +31,7 @@ public final class Constants {
 
     public static final File MINECRAFT_DIR = (Launch.minecraftHome == null ? new File(".") : Launch.minecraftHome);
     public static final File SCREENSHOT_DIR = new File(MINECRAFT_DIR, "screenshots");
+    public static final File CRASH_REPORT_DIR = new File(MINECRAFT_DIR, "crash-reports");
     public static final File CLIENT_DIR = new File(MINECRAFT_DIR, MOD_NAME);
     public static final File CACHE_DIR = new File(CLIENT_DIR, "cache");
     public static final File ACCOUNT_SWITCHER_DIR = new File(CLIENT_DIR, "accounts");

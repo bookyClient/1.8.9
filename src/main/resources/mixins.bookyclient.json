@@ -11,6 +11,7 @@
     "client.MixinEntityPlayerSP",
     "client.MixinEntityRenderer",
     "client.MixinMinecraft",
+    "client.MixinMinecraftCrash",
     "forge.MixinFMLCommonHandler",
     "forge.MixinGuiModList",
     "gui.MixinGui",
