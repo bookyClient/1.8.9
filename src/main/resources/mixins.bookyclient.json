@@ -20,6 +20,7 @@
     "gui.MixinGuiNewChat",
     "gui.MixinGuiOptions",
     "gui.MixinGuiPlayerTabOverlay",
+    "gui.MixinGuiScreen",
     "main.MinecraftAccessor",
     "main.MixinMinecraft",
     "main.MixinMinecraftCrash",

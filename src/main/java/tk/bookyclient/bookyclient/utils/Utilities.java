@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class Utilities {
 
+    private long blurStart = 0L;
+
     Utilities() {
     }
 
@@ -52,5 +54,25 @@ public class Utilities {
         } catch (NoSuchAlgorithmException exception) {
             throw new Error(exception);
         }
+    }
+
+    public int getGUIBackgroundColor() {
+        int color = 75000000;
+        float progress = getBlurProgress();
+
+        int a = (int) ((color >>> 24) * progress);
+        int r = (int) (((color >> 16) & 0xFF) * progress);
+        int b = (int) (((color >> 8) & 0xFF) * progress);
+        int g = (int) ((color & 0xFF) * progress);
+
+        return a << 24 | r << 16 | b << 8 | g;
+    }
+
+    public float getBlurProgress() {
+        return Math.min((System.currentTimeMillis() - blurStart) / (float) 100, 1);
+    }
+
+    public void setBlurStart() {
+        blurStart = System.currentTimeMillis();
     }
 }

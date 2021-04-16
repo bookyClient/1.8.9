@@ -2,7 +2,11 @@ package tk.bookyclient.bookyclient.mixins.main;
 // Created by booky10 in bookyClient (15:13 01.01.21)
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.main.GameConfiguration;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -14,6 +18,7 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -47,7 +52,12 @@ public abstract class MixinMinecraft {
 
     @Shadow @Final public Profiler mcProfiler;
 
-    @Shadow public abstract String getVersion();
+    @Shadow
+    public abstract String getVersion();
+
+    @Shadow public WorldClient theWorld;
+
+    @Shadow public EntityRenderer entityRenderer;
 
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createDisplay()V", shift = At.Shift.AFTER, by = 1))
     private void onDisplaySetTitle(CallbackInfo callbackInfo) {
@@ -186,6 +196,19 @@ public abstract class MixinMinecraft {
         } catch (Exception exception) {
             Constants.LOGGER.warn("Couldn't save screenshot", exception);
             return new ChatComponentTranslation("screenshot.failure", exception.getMessage());
+        }
+    }
+
+    @Inject(method = "displayGuiScreen", at = @At("RETURN"))
+    public void postGUIOpen(GuiScreen screen, CallbackInfo callbackInfo) {
+        if (!ClientSettings.getInstance().blurGuiBackground || theWorld == null) return;
+        boolean excluded = screen == null || screen instanceof GuiChat;
+
+        if (!entityRenderer.isShaderActive() && !excluded) {
+            entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
+            Constants.UTILITIES.setBlurStart();
+        } else if (entityRenderer.isShaderActive() && excluded) {
+            entityRenderer.stopUseShader();
         }
     }
 }

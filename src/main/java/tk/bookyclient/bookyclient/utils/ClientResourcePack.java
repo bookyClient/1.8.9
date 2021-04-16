@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class ClientResourcePack implements IResourcePack {
 
-    private static final Set<String> DOMAINS = ImmutableSet.of(Constants.MOD_ID);
+    private static final Set<String> DOMAINS = ImmutableSet.of(Constants.MOD_ID, "minecraft");
     private static final ClientResourcePack INSTANCE = new ClientResourcePack();
 
     @Override
