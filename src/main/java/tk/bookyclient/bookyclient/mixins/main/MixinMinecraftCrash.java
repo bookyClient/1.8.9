@@ -24,22 +24,21 @@ import net.minecraft.util.MinecraftError;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.SplashProgress;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tk.bookyclient.bookyclient.features.CrashScreenGUI;
 import tk.bookyclient.bookyclient.utils.Constants;
 import tk.bookyclient.bookyclient.utils.StateManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.nio.FloatBuffer;
 import java.util.Date;
 import java.util.List;
 import java.util.Queue;
@@ -69,34 +68,48 @@ public abstract class MixinMinecraftCrash {
     @Shadow private LanguageManager mcLanguageManager;
     @Shadow @Final private IMetadataSerializer metadataSerializer_;
 
-    @Shadow @SuppressWarnings("RedundantThrows") protected abstract void startGame();
+    @Shadow
+    @SuppressWarnings("RedundantThrows")
+    protected abstract void startGame();
 
-    @Shadow @SuppressWarnings("RedundantThrows") protected abstract void runGameLoop();
+    @Shadow
+    @SuppressWarnings("RedundantThrows")
+    protected abstract void runGameLoop();
 
-    @Shadow public abstract void displayGuiScreen(GuiScreen guiScreenIn);
+    @Shadow
+    public abstract void displayGuiScreen(GuiScreen guiScreenIn);
 
-    @Shadow public abstract CrashReport addGraphicsAndWorldToCrashReport(CrashReport theCrash);
+    @Shadow
+    public abstract CrashReport addGraphicsAndWorldToCrashReport(CrashReport theCrash);
 
-    @Shadow public abstract void shutdownMinecraftApplet();
+    @Shadow
+    public abstract void shutdownMinecraftApplet();
 
-    @Shadow public abstract NetHandlerPlayClient getNetHandler();
+    @Shadow
+    public abstract NetHandlerPlayClient getNetHandler();
 
-    @Shadow public abstract void loadWorld(WorldClient worldClientIn);
+    @Shadow
+    public abstract void loadWorld(WorldClient worldClientIn);
 
-    @Shadow public abstract void refreshResources();
+    @Shadow
+    public abstract void refreshResources();
 
-    @Shadow public abstract void updateDisplay();
+    @Shadow
+    public abstract void updateDisplay();
 
-    @Shadow protected abstract void checkGLError(String message);
+    @Shadow
+    protected abstract void checkGLError(String message);
+
+    @Shadow
+    public abstract void displayCrashReport(CrashReport crashReportIn);
+
+    @Shadow
+    public abstract void freeMemory();
 
     private int crashCount = 0;
 
-    /**
-     * @author booky10
-     * @reason Deny these actually crashing crashes
-     */
-    @Overwrite
-    public void run() {
+    @Inject(method = "run", at = @At("HEAD"), cancellable = true)
+    public void run(CallbackInfo callbackInfo) {
         running = true;
 
         try {
@@ -114,25 +127,31 @@ public abstract class MixinMinecraftCrash {
                         runGameLoop();
                     } catch (ReportedException exception) {
                         crashCount++;
+
                         addGraphicsAndWorldToCrashReport(exception.getCrashReport());
                         addInfoToCrash(exception.getCrashReport());
                         resetGameState();
+
                         Constants.LOGGER.error("Reported exception thrown!", exception);
                         displayCrashScreen(exception.getCrashReport());
                     } catch (Throwable throwable) {
                         crashCount++;
+
                         CrashReport report = new CrashReport("Unexpected error", throwable);
                         addGraphicsAndWorldToCrashReport(report);
                         addInfoToCrash(report);
                         resetGameState();
+
                         Constants.LOGGER.error("Unreported exception thrown!", throwable);
                         displayCrashScreen(report);
                     }
                 } else {
                     crashCount++;
+
                     addInfoToCrash(crashReporter);
                     freeMemory();
                     displayCrashScreen(crashReporter);
+
                     hasCrashed = false;
                     crashReporter = null;
                 }
@@ -141,6 +160,8 @@ public abstract class MixinMinecraftCrash {
         } finally {
             shutdownMinecraftApplet();
         }
+
+        callbackInfo.cancel();
     }
 
     public void addInfoToCrash(CrashReport report) {
@@ -248,13 +269,10 @@ public abstract class MixinMinecraftCrash {
         }
     }
 
-    /**
-     * @author booky10
-     * @reason My methods are better
-     */
-    @Overwrite
-    public void displayCrashReport(CrashReport report) {
+    @Inject(method = "displayCrashReport", at = @At("HEAD"), cancellable = true)
+    public void displayCrashReport(CrashReport report, CallbackInfo callbackInfo) {
         saveReport(report);
+        callbackInfo.cancel();
     }
 
     public void resetGameState() {
@@ -297,13 +315,10 @@ public abstract class MixinMinecraftCrash {
         }
     }
 
-    /**
-     * @author booky10
-     * @reason My methods still better
-     */
-    @Overwrite
-    public void freeMemory() {
+    @Inject(method = "freeMemory", at = @At("HEAD"), cancellable = true)
+    public void freeMemory(CallbackInfo callbackInfo) {
         resetGameState();
+        callbackInfo.cancel();
     }
 
     private void saveReport(CrashReport report) {
