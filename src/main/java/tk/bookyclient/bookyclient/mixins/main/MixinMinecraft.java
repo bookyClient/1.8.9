@@ -211,4 +211,9 @@ public abstract class MixinMinecraft {
             entityRenderer.stopUseShader();
         }
     }
+
+    @Inject(method = "runTick", at = @At("RETURN"))
+    public void postTick(CallbackInfo callbackInfo) {
+        Constants.UTILITIES.tick();
+    }
 }

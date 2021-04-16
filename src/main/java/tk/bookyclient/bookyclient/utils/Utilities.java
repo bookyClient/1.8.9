@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Utilities {
 
-    private long blurStart = 0L;
+    private long blurStart = 0L, tick;
 
     Utilities() {
     }
@@ -74,5 +74,13 @@ public class Utilities {
 
     public void setBlurStart() {
         blurStart = System.currentTimeMillis();
+    }
+
+    public long getTick() {
+        return tick;
+    }
+
+    public void tick() {
+        tick = System.nanoTime();
     }
 }

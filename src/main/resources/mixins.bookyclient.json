@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "entity.MixinEntity",
+    "entity.MixinEntityItem",
     "entity.MixinEntityLivingBase",
     "entity.MixinEntityPlayerSP",
     "entity.MixinEntityRenderer",
@@ -25,7 +26,8 @@
     "main.MixinMinecraft",
     "main.MixinMinecraftCrash",
     "network.MixinNetHandlerPlayClient",
-    "render.MixinRender"
+    "render.MixinRender",
+    "render.MixinRenderEntityItem"
   ],
   "injectors": {
     "defaultRequire": 1
