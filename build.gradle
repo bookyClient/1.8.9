@@ -69,6 +69,12 @@ minecraft {
     String resolved_mixin_configs = mod_mixin_configs.replace('${mod_id}', mod_id)
     clientRunArgs += '--mixin ' + resolved_mixin_configs
     serverRunArgs += '--mixin ' + resolved_mixin_configs
+
+    clientRunArgs += '-Dmixin.hotSwap=true'
+    serverRunArgs += '-Dmixin.hotSwap=true'
+
+    clientRunArgs += '-Dmixin.checks.interfaces=true'
+    serverRunArgs += '-Dmixin.checks.interfaces=true'
 }
 
 repositories {
