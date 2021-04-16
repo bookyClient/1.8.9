@@ -33,9 +33,9 @@ public class MixinGuiIngame extends Gui {
 
     @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"), expect = 3)
     public int onDrawString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        if (!text.startsWith(EnumChatFormatting.RED.toString())) return fontRenderer.drawString(text, x, y, color);
+        if (!text.startsWith(EnumChatFormatting.RED.toString())) return fontRenderer.drawStringWithShadow(text, x, y, color);
         if (ClientSettings.getInstance().hideScoreboardRedScores) return 0;
 
-        return fontRenderer.drawString(text, x, y, color);
+        return fontRenderer.drawStringWithShadow(text, x, y, color);
     }
 }
