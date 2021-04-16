@@ -69,9 +69,9 @@ public class CrashScreenGUI extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        drawCenteredString(fontRendererObj, "Game crashed!", width / 2, height / 4 - 40, 16777215);
+        drawCenteredString(fontRendererObj, "Game crashed!", width / 2, height / 4 - 75, 16777215);
         for (int i = 0; i < trace.length; i++) {
-            drawString(fontRendererObj, trace[i], width / 2 - 300, height / 4 + i * 9, 10526880);
+            drawString(fontRendererObj, trace[i], 20, height / 4 - 60 + i * 9, 10526880);
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);
