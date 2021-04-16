@@ -26,13 +26,10 @@ public class ClientSettings implements Serializable {
     public boolean nameTagBackground = true;
     public boolean blurGuiBackground = false;
     public boolean itemPhysics = false;
-    public boolean addressInRPC = true;
     public boolean betterHead = false;
-    public boolean betterSwing = false;
     public boolean smoothScrolling = false;
     public boolean scrollableTooltips = false;
     public boolean renderOwnName = false;
-    public boolean repeatingSoundFix = true;
     public boolean windowedFullscreen = true;
 
     // Temporary values
