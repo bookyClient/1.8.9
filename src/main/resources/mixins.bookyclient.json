@@ -11,6 +11,7 @@
     "entity.MixinEntityPlayerSP",
     "entity.MixinEntityRenderer",
     "forge.MixinFMLCommonHandler",
+    "forge.MixinGuiUtils",
     "forge.gui.MixinGuiModList",
     "gui.MixinGui",
     "gui.MixinGuiChat",
