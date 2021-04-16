@@ -15,10 +15,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.profiler.Profiler;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -47,6 +44,7 @@ public abstract class MixinMinecraft {
 
     private IntBuffer pixelBuffer;
     private int[] pixelValues;
+    private long gameTick;
 
     @Shadow private boolean fullscreen;
 
@@ -215,5 +213,22 @@ public abstract class MixinMinecraft {
     @Inject(method = "runTick", at = @At("RETURN"))
     public void postTick(CallbackInfo callbackInfo) {
         Constants.UTILITIES.tick();
+    }
+
+    @Inject(method = "runGameLoop", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateDisplay()V", shift = At.Shift.BEFORE))
+    public void prePostRender(CallbackInfo callbackInfo) {
+        if (!ClientSettings.getInstance().motionBlur) return;
+
+        float strength, percent = ((Minecraft.getDebugFPS() > 120) ? ((Minecraft.getDebugFPS() > 200) ? 60.0f : 30.0f) : 0.0f) * 10.0f * (ClientSettings.getInstance().motionBlurMultiplier);
+        long lastGameTick = gameTick;
+        gameTick = System.currentTimeMillis();
+
+        if (System.currentTimeMillis() - lastGameTick > 10000L) strength = 0.0f;
+        else strength = MathHelper.clamp_float(percent, 0, 990) / 1000.0f;
+        if (strength <= 0) return;
+
+        GL11.glAccum(GL11.GL_MULT, strength);
+        GL11.glAccum(GL11.GL_ACCUM, 1.0f - strength);
+        GL11.glAccum(GL11.GL_RETURN, 1.0f);
     }
 }
