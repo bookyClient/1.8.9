@@ -26,6 +26,7 @@
     "main.MixinMinecraft",
     "main.MixinMinecraftCrash",
     "network.MixinNetHandlerPlayClient",
+    "render.MixinModelBiped",
     "render.MixinRender",
     "render.MixinRenderEntityItem"
   ],
