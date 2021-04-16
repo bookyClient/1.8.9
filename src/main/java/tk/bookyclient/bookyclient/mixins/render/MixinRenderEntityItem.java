@@ -26,7 +26,7 @@ import java.util.Random;
 @Mixin(RenderEntityItem.class)
 public abstract class MixinRenderEntityItem extends Render<EntityItem> {
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract boolean shouldSpreadItems();
 
     private static final Random random = new Random();
