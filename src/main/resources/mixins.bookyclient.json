@@ -22,6 +22,8 @@
     "gui.MixinGuiOptions",
     "gui.MixinGuiPlayerTabOverlay",
     "gui.MixinGuiScreen",
+    "gui.MixinGuiScrollingList",
+    "gui.MixinGuiSlot",
     "main.MinecraftAccessor",
     "main.MixinMinecraft",
     "main.MixinMinecraftCrash",

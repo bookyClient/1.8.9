@@ -83,4 +83,30 @@ public class Utilities {
     public void tick() {
         tick = System.nanoTime();
     }
+
+    public float easeScroll(float[] target, float scroll, float maxScroll, float delta, double start, double duration) {
+        target[0] = clamp(target[0], maxScroll);
+
+        if (target[0] < 0) {
+            target[0] -= target[0] * (1 - 0.24f) * delta / 3;
+        } else if (target[0] > maxScroll) {
+            target[0] = (target[0] - maxScroll) * (1 - (1 - 0.24f) * delta / 3) + maxScroll;
+        }
+
+        if (Math.abs(scroll - target[0]) > 1e-3f) {
+            return scroll + (target[0] - scroll) * (float) Math.min((System.currentTimeMillis() - start) / duration * delta * 3, 1);
+        } else {
+            return target[0];
+        }
+    }
+
+    public float clamp(float value, float maxScroll) {
+        return clamp(value, maxScroll, 300);
+    }
+
+    public float clamp(float value, float maxScroll, float clampExtension) {
+        maxScroll += clampExtension;
+        clampExtension = -clampExtension;
+        return value < clampExtension ? clampExtension : (Math.min(value, maxScroll));
+    }
 }
