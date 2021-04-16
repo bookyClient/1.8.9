@@ -31,7 +31,8 @@
     "network.MixinNetHandlerPlayClient",
     "render.MixinModelBiped",
     "render.MixinRender",
-    "render.MixinRenderEntityItem"
+    "render.MixinRenderEntityItem",
+    "render.MixinRendererLivingEntity"
   ],
   "injectors": {
     "defaultRequire": 1
