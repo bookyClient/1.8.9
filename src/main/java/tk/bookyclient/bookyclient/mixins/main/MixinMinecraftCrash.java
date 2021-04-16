@@ -168,6 +168,7 @@ public abstract class MixinMinecraftCrash {
         report.getCategory().addCrashSection("Crashes Since Start", crashCount);
     }
 
+    @SuppressWarnings("deprecation")
     public void displayInitCrash(CrashReport report) {
         saveReport(report);
 
@@ -192,7 +193,6 @@ public abstract class MixinMinecraftCrash {
             running = true;
 
             try {
-                // noinspection deprecation
                 SplashProgress.pause();
             } catch (Throwable ignored) {
             }
