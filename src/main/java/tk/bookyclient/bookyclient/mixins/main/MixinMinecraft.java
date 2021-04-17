@@ -11,12 +11,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.*;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -44,6 +46,7 @@ public abstract class MixinMinecraft {
 
     private IntBuffer pixelBuffer;
     private int[] pixelValues;
+    private boolean zooming;
     private long gameTick;
 
     @Shadow private boolean fullscreen;
@@ -56,6 +59,8 @@ public abstract class MixinMinecraft {
     @Shadow public WorldClient theWorld;
 
     @Shadow public EntityRenderer entityRenderer;
+
+    @Shadow public GameSettings gameSettings;
 
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createDisplay()V", shift = At.Shift.AFTER, by = 1))
     private void onDisplaySetTitle(CallbackInfo callbackInfo) {
@@ -230,5 +235,20 @@ public abstract class MixinMinecraft {
         GL11.glAccum(GL11.GL_MULT, strength);
         GL11.glAccum(GL11.GL_ACCUM, 1.0f - strength);
         GL11.glAccum(GL11.GL_RETURN, 1.0f);
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;dispatchKeypresses()V", shift = At.Shift.AFTER))
+    public void postKeyboard(CallbackInfo callbackInfo) {
+        int key = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() + 256 : Keyboard.getEventKey();
+        boolean state = Keyboard.getEventKeyState();
+
+        if (key == Constants.UTILITIES.getZoomKey().getKeyCode()) {
+            if (zooming != state) {
+                ClientSettings.zoom = state;
+                gameSettings.smoothCamera = state;
+            }
+
+            zooming = state;
+        }
     }
 }

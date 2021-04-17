@@ -1,6 +1,9 @@
 package tk.bookyclient.bookyclient.utils;
 
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.ModMetadata;
+import org.lwjgl.input.Keyboard;
 
 import javax.crypto.KeyGenerator;
 import java.security.MessageDigest;
@@ -12,6 +15,7 @@ import java.util.Map;
 public class Utilities {
 
     private long blurStart = 0L, tick;
+    private KeyBinding zoom;
 
     Utilities() {
     }
@@ -108,5 +112,13 @@ public class Utilities {
         maxScroll += clampExtension;
         clampExtension = -clampExtension;
         return value < clampExtension ? clampExtension : (Math.min(value, maxScroll));
+    }
+
+    public void registerKeys() {
+        ClientRegistry.registerKeyBinding(zoom = new KeyBinding("client.key.zoom", Keyboard.KEY_Z, "client.key.category"));
+    }
+
+    public KeyBinding getZoomKey() {
+        return zoom;
     }
 }

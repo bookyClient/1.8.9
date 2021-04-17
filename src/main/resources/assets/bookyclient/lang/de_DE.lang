@@ -66,3 +66,7 @@ client.colors.blue=Blau:
 client.colors.opacity=Sichtbarkeit:
 
 client.async_screenshots.started=Der Screenshot wird aufgenommen...
+
+# Keybindings
+client.key.category=Client
+client.key.zoom=Zoom

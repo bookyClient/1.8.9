@@ -20,6 +20,7 @@ public class ClientMod {
 
     public static void start() {
         Accounts.load();
+        Constants.UTILITIES.registerKeys();
     }
 
     public static void postStart() {
