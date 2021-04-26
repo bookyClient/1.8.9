@@ -9,7 +9,7 @@
     "entity.MixinEntityItem",
     "entity.MixinEntityLivingBase",
     "entity.MixinEntityPlayerSP",
-    "entity.MixinEntityRenderer",
+    "render.MixinEntityRenderer",
     "forge.MixinFMLCommonHandler",
     "forge.MixinGuiUtils",
     "forge.gui.MixinGuiModList",
