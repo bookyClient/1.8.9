@@ -16,6 +16,7 @@ public class MixinGuiChat extends GuiScreen {
 
     @Inject(method = "drawScreen", at = @At("RETURN"))
     public void onDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
+        if (mc.gameSettings.showDebugInfo) return;
         KeystrokesUtils.renderer.renderKeystrokes();
     }
 

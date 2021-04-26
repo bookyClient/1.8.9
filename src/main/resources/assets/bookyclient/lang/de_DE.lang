@@ -71,3 +71,4 @@ client.async_screenshots.started=Der Screenshot wird aufgenommen...
 # Keybindings
 client.key.category=Client
 client.key.zoom=Zoom
+client.key.perspective=Perspektive

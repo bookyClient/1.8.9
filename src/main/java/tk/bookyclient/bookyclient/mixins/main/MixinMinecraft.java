@@ -2,6 +2,7 @@ package tk.bookyclient.bookyclient.mixins.main;
 // Created by booky10 in bookyClient (15:13 01.01.21)
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.main.GameConfiguration;
@@ -44,9 +45,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
 
+    private int previousPerspective = 0;
     private IntBuffer pixelBuffer;
     private int[] pixelValues;
-    private boolean zooming;
     private long gameTick;
 
     @Shadow private boolean fullscreen;
@@ -61,6 +62,8 @@ public abstract class MixinMinecraft {
     @Shadow public EntityRenderer entityRenderer;
 
     @Shadow public GameSettings gameSettings;
+
+    @Shadow public EntityPlayerSP thePlayer;
 
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createDisplay()V", shift = At.Shift.AFTER, by = 1))
     private void onDisplaySetTitle(CallbackInfo callbackInfo) {
@@ -79,7 +82,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "runGameLoop", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/achievement/GuiAchievement;updateAchievementWindow()V", shift = At.Shift.BY, by = -1))
     public void onRender(CallbackInfo callbackInfo) {
-        mcProfiler.startSection("bookyClient");
+        mcProfiler.startSection(Constants.MOD_NAME);
 
         mcProfiler.endStartSection("Rendering Keystrokes");
         KeystrokesUtils.renderer.tryRender();
@@ -243,12 +246,23 @@ public abstract class MixinMinecraft {
         boolean state = Keyboard.getEventKeyState();
 
         if (key == Constants.UTILITIES.getZoomKey().getKeyCode()) {
-            if (zooming != state) {
-                ClientSettings.zoom = state;
-                gameSettings.smoothCamera = state;
+            gameSettings.smoothCamera = ClientSettings.zoom = state;
+        } else if (key == Constants.UTILITIES.getPerspectiveKey().getKeyCode()) {
+            if (ClientSettings.perspective != state) {
+                ClientSettings.perspective = state;
+
+                Constants.UTILITIES.setCameraYaw(thePlayer.rotationYaw);
+                Constants.UTILITIES.setCameraPitch(thePlayer.rotationPitch);
+
+                if (state) {
+                    previousPerspective = gameSettings.thirdPersonView;
+                    gameSettings.thirdPersonView = 1;
+                } else {
+                    gameSettings.thirdPersonView = previousPerspective;
+                }
             }
 
-            zooming = state;
+            ClientSettings.perspective = state;
         }
     }
 }

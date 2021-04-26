@@ -15,7 +15,8 @@ import java.util.Map;
 public class Utilities {
 
     private long blurStart = 0L, tick;
-    private KeyBinding zoom;
+    private KeyBinding zoom, perspective;
+    private float cameraYaw, cameraPitch;
 
     Utilities() {
     }
@@ -116,9 +117,30 @@ public class Utilities {
 
     public void registerKeys() {
         ClientRegistry.registerKeyBinding(zoom = new KeyBinding("client.key.zoom", Keyboard.KEY_Z, "client.key.category"));
+        ClientRegistry.registerKeyBinding(perspective = new KeyBinding("client.key.perspective", Keyboard.KEY_F, "client.key.category"));
     }
 
     public KeyBinding getZoomKey() {
         return zoom;
+    }
+
+    public KeyBinding getPerspectiveKey() {
+        return perspective;
+    }
+
+    public float getCameraYaw() {
+        return cameraYaw;
+    }
+
+    public void setCameraYaw(float cameraYaw) {
+        this.cameraYaw = cameraYaw;
+    }
+
+    public float getCameraPitch() {
+        return cameraPitch;
+    }
+
+    public void setCameraPitch(float cameraPitch) {
+        this.cameraPitch = cameraPitch;
     }
 }

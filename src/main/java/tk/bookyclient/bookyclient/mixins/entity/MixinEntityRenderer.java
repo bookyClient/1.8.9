@@ -4,24 +4,72 @@ package tk.bookyclient.bookyclient.mixins.entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
+import tk.bookyclient.bookyclient.utils.Constants;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer implements IResourceManagerReloadListener {
 
-    private static final ClientSettings settings = ClientSettings.getInstance();
-
     @Shadow private Minecraft mc;
 
     @Inject(method = "getFOVModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getRenderViewEntity()Lnet/minecraft/entity/Entity;", shift = At.Shift.BEFORE), cancellable = true)
-    public void afterUseCheck(float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Float> callbackInfoReturnable) {
+    public void afterUseCheck(float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Float> returnValue) {
         if (!useFOVSetting) return;
-        if (ClientSettings.zoom) callbackInfoReturnable.setReturnValue(30f);
-        else if (!settings.fovModifier) callbackInfoReturnable.setReturnValue(mc.gameSettings.fovSetting);
+
+        if (ClientSettings.zoom) {
+            returnValue.setReturnValue(30f);
+        } else if (!ClientSettings.getInstance().fovModifier) {
+            returnValue.setReturnValue(mc.gameSettings.fovSetting);
+        }
+    }
+
+    @Redirect(method = "orientCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;rotationYaw:F"))
+    public float onRotationYaw(Entity entity) {
+        return ClientSettings.perspective ? Constants.UTILITIES.getCameraYaw() : entity.rotationYaw;
+    }
+
+    @Redirect(method = "orientCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;rotationPitch:F"))
+    public float onRotationPitch(Entity entity) {
+        return ClientSettings.perspective ? Constants.UTILITIES.getCameraPitch() : entity.rotationPitch;
+    }
+
+    @Redirect(method = "orientCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevRotationYaw:F"))
+    public float onPrevRotationYaw(Entity entity) {
+        return ClientSettings.perspective ? Constants.UTILITIES.getCameraYaw() : entity.prevRotationYaw;
+    }
+
+    @Redirect(method = "orientCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevRotationPitch:F"))
+    public float onPrevRotationPitch(Entity entity) {
+        return ClientSettings.perspective ? Constants.UTILITIES.getCameraPitch() : entity.prevRotationPitch;
+    }
+
+    @Redirect(method = "updateCameraAndRender", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;inGameHasFocus:Z"))
+    public boolean onFocusGet(Minecraft minecraft) {
+        if (minecraft.inGameHasFocus && Display.isActive()) {
+            if (!ClientSettings.perspective) return true;
+
+            minecraft.mouseHelper.mouseXYChange();
+            float f1 = minecraft.gameSettings.mouseSensitivity * 0.6f + 0.2f;
+            float f2 = f1 * f1 * f1 * 8.0f;
+            float f3 = (float) minecraft.mouseHelper.deltaX * f2;
+            float f4 = (float) minecraft.mouseHelper.deltaY * f2;
+
+            Constants.UTILITIES.setCameraYaw(Constants.UTILITIES.getCameraYaw() + f3 * 0.15f);
+            Constants.UTILITIES.setCameraPitch(Constants.UTILITIES.getCameraPitch() + f4 * 0.15f);
+
+            if (Math.abs(Constants.UTILITIES.getCameraPitch()) > 90) {
+                Constants.UTILITIES.setCameraPitch(Constants.UTILITIES.getCameraPitch() > 0.0f ? 90.0f : -90.0f);
+            }
+        }
+
+        return false;
     }
 }
