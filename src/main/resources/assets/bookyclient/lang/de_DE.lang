@@ -30,12 +30,13 @@ keystrokes.gui.main.toggle=Keystrokes: %s
 keystrokes.gui.main.spacebar=Zeige Leertaste: %s
 keystrokes.gui.main.reach=Zeige Reichweite: %s
 keystrokes.gui.main.fps=Zeige FPS: %s
-keystrokes.gui.main.scale=Größe:
 keystrokes.gui.main.wasd=Zeige WASD: %s
 keystrokes.gui.main.mouse=Zeige Maus Tasten: %s
 keystrokes.gui.main.cps=Zeige CPS: %s
 keystrokes.gui.main.sneak=Zeige Shift: %s
 keystrokes.gui.main.ping=Zeige Ping: %s
+
+keystrokes.gui.main.scale=Größe:
 
 keystrokes.gui.colors.title=Keystrokes - Tasten Farben
 keystrokes.gui.colors.name=Tasten Farben...
