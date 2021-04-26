@@ -5,12 +5,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.MovingObjectPosition;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tk.bookyclient.bookyclient.settings.ClientSettings;
 import tk.bookyclient.bookyclient.utils.Constants;
@@ -71,5 +74,16 @@ public abstract class MixinEntityRenderer implements IResourceManagerReloadListe
         }
 
         return false;
+    }
+
+    @Inject(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;clear(I)V", ordinal = 1))
+    public void preHandRender(int pass, float partialTicks, long finishTimeNano, CallbackInfo callbackInfo) {
+        if (!ClientSettings.getInstance().oldPunching || mc.thePlayer.getItemInUseCount() <= 0) return;
+        if (!mc.gameSettings.keyBindAttack.isKeyDown() || !mc.gameSettings.keyBindUseItem.isKeyDown()) return;
+        if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return;
+        if (mc.thePlayer.isSwingInProgress && mc.thePlayer.swingProgressInt < (mc.thePlayer.isPotionActive(Potion.digSpeed) ? 6 - 1 + mc.thePlayer.getActivePotionEffect(Potion.digSpeed).getAmplifier() : mc.thePlayer.isPotionActive(Potion.digSlowdown) ? 6 + (1 + mc.thePlayer.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6) / 2 && mc.thePlayer.swingProgress >= 0) return;
+
+        mc.thePlayer.swingProgressInt = -1;
+        mc.thePlayer.isSwingInProgress = true;
     }
 }

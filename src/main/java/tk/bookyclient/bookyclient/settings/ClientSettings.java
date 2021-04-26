@@ -92,10 +92,8 @@ public class ClientSettings implements Serializable {
     public int blazeRodsOpacity = 255;
 
     // Old Animations
-    public boolean oldAnimations = false;
-    public boolean oldAnimationsRod = false;
-    public boolean oldAnimationsPunching = false;
-    public boolean oldAnimationsBlockHitting = false;
+    public boolean oldPunching = false;
+    public boolean oldBlockHitting = false;
 
     // Other things
     private static ClientSettings instance = new ClientSettings();
